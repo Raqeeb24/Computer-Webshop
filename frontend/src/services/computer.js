@@ -29,6 +29,10 @@ class ComputerDataService {
     return http.get(`/computers/cpu`);
   }
 
+  createComputer(data){
+    return http.post("")
+  }
+
 }
 
 export default new ComputerDataService();
