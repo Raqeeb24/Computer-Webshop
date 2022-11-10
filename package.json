@@ -16,9 +16,10 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "npm start",
-    "build": "npm run",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "repository": {
     "type": "git",
@@ -29,5 +30,17 @@
   "bugs": {
     "url": "https://github.com/Raqeeb24/Computer-Webshop/issues"
   },
-  "homepage": "https://github.com/Raqeeb24/Computer-Webshop#readme"
+  "homepage": "https://github.com/Raqeeb24/Computer-Webshop#readme",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
