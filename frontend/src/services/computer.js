@@ -20,12 +20,12 @@ class ComputerDataService {
   } 
 
   createReview(data) {
-    return axios.get(`${baseURL}/review-new`, data);
+    return axios.post(`${baseURL}/computers/review-new`, data);
     //return http.post("/review-new", data);
   }
 
   updateReview(data) {
-    return axios.get(`${baseURL}/review-edit`, data);
+    return axios.put(`${baseURL}/computers/review-edit`, data);
     //return http.put("/review-edit", data);
   }
 
@@ -38,7 +38,7 @@ class ComputerDataService {
   }
 
   createComputer(data){
-    return http.post("")
+    return axios.post(`${baseURL}/computers/computer`, data);
   }
 
 }
