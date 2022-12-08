@@ -22,16 +22,19 @@ function AddComputer() {
         setComputerInfo({...computerInfo, [e.target.name]: e.target.value})
     };
 
-    const saveComptuer = () => {
+    const saveComptuer = (e) => {
+        e.preventDefault();
         var data = {
             computer: computerInfo
         };
         
         ComputerDataService.createComputer(computerInfo)
         .then(response => {
+            window.alert(`successfully added ${computerInfo.name} to ComputerList`);
             console.log(response.computerInfo);
           })
           .catch(e => {
+            window.alert(`failed to add ${computerInfo.name}`);
             console.log(e);
           });
     }
