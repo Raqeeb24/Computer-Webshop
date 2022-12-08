@@ -24,7 +24,7 @@ function App() {
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
         <a href="/computers" className="navbar-brand">
-          Computer Reviews
+          Computer Shop
         </a>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
