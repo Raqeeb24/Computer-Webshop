@@ -1,6 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
 
 import { Switch, Route, Link } from 'react-router-dom';
 
@@ -22,17 +24,13 @@ function App() {
   }
   return (
     <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <a href="/computers" className="navbar-brand">
-          Computer Shop
-        </a>
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to={"/computers"} className="nav-link">
-              Computers
-            </Link>
-          </li>
-          <li className="nav-item" >
+      <Navbar expand="lg" bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand>Computer Webshop</Navbar.Brand>
+          <Navbar.Toggle className='justify-content-end' aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+            <Link to={'/computers'} className='nav-link'>Computers</Link>
             {user ? (
               <a href={logout} className="nav-link" style={{ cursor: 'pointer' }}>
                 Logout {user.name}
@@ -43,31 +41,35 @@ function App() {
               </Link>
             )}
 
-          </li>
-          <li className='nav-item'>
-            <Link to={"/addComputer"} className="nav-link">
-              AddComputer
-            </Link>
-          </li>
-        </div>
-      </nav>
+            <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
+            </Nav> 
+            <Nav.Item className='ml-auto'>
+              <Navbar.Text>
+                <div>Shopping cart</div>
+              </Navbar.Text>
+            </Nav.Item>
+          </Navbar.Collapse>
+
+        </Container>
+      </Navbar>
+
 
       <div className="container mt-3">
         <Switch>
           <Route exact path={["/", "/computers"]} component={ComputersList} />
-          <Route 
+          <Route
             path="/computers/:id/review"
             render={(props) => (
               <AddReview {...props} user={user} />
             )}
           />
-          <Route 
+          <Route
             path="/computers/:id"
             render={(props) => (
               <Computer {...props} user={user} />
             )}
           />
-          <Route 
+          <Route
             path="/login"
             render={(props) => (
               <Login {...props} login={login} />
@@ -75,7 +77,7 @@ function App() {
           />
           <Route
             path="/addComputer"
-            render={(props) =>(
+            render={(props) => (
               <AddComputer {...props} login={login} />
             )}
           />
