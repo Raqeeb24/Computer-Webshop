@@ -1,6 +1,5 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -15,7 +14,6 @@ import AddComputer from './components/add-computer';
 
 function App() {
   const [user, setUser] = React.useState(null);
-  const [shoppincart, setShoppingcart] = React.useState(false);
 
   async function login(user = null) {
     setUser(user);
@@ -26,21 +24,34 @@ function App() {
   }
   return (
     <div>
-      <div className='nav'>
-        <h3>title</h3>
-        <Link to={'/computers'} className='nav-link'>Computers</Link>
-        {user ? (
-          <a href={logout} className="nav-link" style={{ cursor: 'pointer' }}>
-            Logout {user.name}
-          </a>
-        ) : (
-          <Link to={"/login"} className="nav-link">
-            Login
-          </Link>
-        )}
+      <Navbar expand="lg" bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand>Computer Webshop</Navbar.Brand>
+          <Navbar.Toggle className='justify-content-end' aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+            <Link to={'/computers'} className='nav-link'>Computers</Link>
+            {user ? (
+              <a href={logout} className="nav-link" style={{ cursor: 'pointer' }}>
+                Logout {user.name}
+              </a>
+            ) : (
+              <Link to={"/login"} className="nav-link">
+                Login
+              </Link>
+            )}
 
-        <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
-      </div>
+            <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
+            </Nav> 
+            <Nav.Item className='ml-auto'>
+              <Navbar.Text>
+                <div>Shopping cart</div>
+              </Navbar.Text>
+            </Nav.Item>
+          </Navbar.Collapse>
+
+        </Container>
+      </Navbar>
 
 
       <div className="container mt-3">
@@ -80,34 +91,3 @@ function App() {
 }
 
 export default App;
-/*
-<Navbar expand="lg" bg="dark" variant="dark">
-        <Container>
-          <Navbar.Brand>Computer Webshop</Navbar.Brand>
-          <Navbar.Toggle className='justify-content-end' aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-            <Link to={'/computers'} className='nav-link'>Computers</Link>
-            {user ? (
-              <a href={logout} className="nav-link" style={{ cursor: 'pointer' }}>
-                Logout {user.name}
-              </a>
-            ) : (
-              <Link to={"/login"} className="nav-link">
-                Login
-              </Link>
-            )}
-
-            <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
-            </Nav> 
-            <Nav.Item className='ml-auto'>
-              <Navbar.Text>
-                {shoppincart === true ? <div>true</div> : <div>false</div>}
-                <div>Shopping cart</div>
-              </Navbar.Text>
-            </Nav.Item>
-          </Navbar.Collapse>
-
-        </Container>
-      </Navbar>
-*/
