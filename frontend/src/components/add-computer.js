@@ -50,7 +50,7 @@ function AddComputer() {
                     class="form-control"
                     name="name"
                     onChange={changeHandler}
-                />
+                    placeholder="name" />
                 <div class="row">
                     <div class="col">
                         <label for="input">CPU</label>
@@ -58,7 +58,7 @@ function AddComputer() {
                             class="form-control"
                             name="cpu"
                             onChange={changeHandler}
-                        />
+                            placeholder="cpu" />
                     </div>
                     <div class="col">
                         <label for="input">CPU-cooler</label>
@@ -66,7 +66,7 @@ function AddComputer() {
                             class="form-control"
                             name="cpu_cooler"
                             onChange={changeHandler}
-                        />
+                            placeholder="cpu-cooler" />
                     </div>
                 </div>
                 <label for="input">Mainboard</label>
@@ -74,19 +74,19 @@ function AddComputer() {
                     class="form-control"
                     name="mainboard"
                     onChange={changeHandler}
-                />
+                    placeholder="mainboard" />
                 <label for="input">RAM</label>
                 <input type="text"
                     class="form-control"
                     name="ram"
                     onChange={changeHandler}
-                />
+                    placeholder="ram" />
                 <label for="input">GPU</label>
                 <input type="text"
                     class="form-control"
                     name="gpu"
                     onChange={changeHandler}
-                />
+                    placeholder="gpu" />
                 <label for="input">SSD</label>
                 <input type="text"
                     class="form-control"
@@ -98,20 +98,20 @@ function AddComputer() {
                     class="form-control"
                     name="case"
                     onChange={changeHandler}
-                />
+                    placeholder="case" />
                 <label for="input">Power supply</label>
                 <input type="text"
                     class="form-control"
                     name="power_supply"
                     onChange={changeHandler}
-                />
+                    placeholder="power supply" />
                 <div class="col-2">
                     <label for="input">Price</label>
                     <input type="text"
                         class="form-control"
                         name="price"
                         onChange={changeHandler}
-                    /><br />
+                        placeholder="price" /><br />
                 </div>
 
                 <button onClick={saveComptuer} type="submit" class="btn btn-primary">submit</button>
