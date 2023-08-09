@@ -6,10 +6,8 @@ export default class ComputersController {
     const page = req.query.page ? parseInt(req.query.page, 10) : 0
 
     let filters = {}
-    if (req.query.cuisine) {
-      filters.cuisine = req.query.cuisine
-    } else if (req.query.zipcode) {
-      filters.zipcode = req.query.zipcode
+    if (req.query.cpu) {
+      filters.cpu = req.query.cpu
     } else if (req.query.name) {
       filters.name = req.query.name
     }
@@ -47,6 +45,7 @@ export default class ComputersController {
   static async apiGetComputerByCpu(req, res, next) {
     try {
       let cpu = await ComputersDAO.getComputerByCpu()
+      console.log(`output cpu: ${cpu}`)
       res.json(cpu)
     } catch (e) {
       console.log(`api, ${e}`)

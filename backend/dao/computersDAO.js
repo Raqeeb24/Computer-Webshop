@@ -26,8 +26,6 @@ export default class ComputersDAO {
     if (filters) {
       if ("name" in filters) {
         query = { $text: { $search: filters["name"] } }
-      } else if ("cuisine" in filters) {
-        query = { "cuisine": { $eq: filters["cuisine"] } }
       } else if ("cpu" in filters) {
         query = { "cpu": { $eq: filters["cpu"] } }
       }
@@ -104,6 +102,7 @@ export default class ComputersDAO {
     let cpu = []
     try {
       cpu = await computers.distinct("cpu")
+      return cpu
     } catch (e) {
       console.log("unable to get cpu")
       console.error(`Unable to get cpu ${e}`)

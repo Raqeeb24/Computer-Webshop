@@ -27,6 +27,6 @@ MongoClient.connect(
         await ComputersDAO.injectDB(client)
         await ReviewsDAO.injectDB(client)
         app.listen(port, () => {
-            console.log('listening on port ${port}')
+            console.log(`listening on port ${port}`)
         })
     })

@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 const ComputersList = props => {
   const [computers, setComputers] = useState([]);
   const [searchName, setSearchName ] = useState("");
-  const [searchZip, setSearchZip ] = useState("");
   const [searchCpu, setSearchCpu ] = useState("");
   const [cpus, setCpu] = useState(["All Cpu"]);
 
@@ -17,11 +16,6 @@ const ComputersList = props => {
   const onChangeSearchName = e => {
     const searchName = e.target.value;
     setSearchName(searchName);
-  };
-
-  const onChangeSearchZip = e => {
-    const searchZip = e.target.value;
-    setSearchZip(searchZip);
   };
 
   const onChangeSearchCpu = e => {
@@ -46,8 +40,7 @@ const ComputersList = props => {
     ComputerDataService.getCpu()
       .then(response => {
         console.log(response.data);
-        setCpu(["All Cpu"].concat(response.data));
-        
+        setCpu(["Search by CPU"].concat(response.data));
       })
       .catch(e => {
         console.log(e);
@@ -73,14 +66,13 @@ const ComputersList = props => {
     find(searchName, "name")
   };
 
-  const findByZip = () => {
-    find(searchZip, "zipcode")
-  };
 
-  const findByCuisine = () => {
-    if (searchCpu === "All Cpu") {
+  const findByCpu = () => {
+    if (searchCpu === "Search by CPU") {
       refreshList();
     } else {
+      console.log("cpu...")
+      console.log(searchCpu)
       find(searchCpu, "cpu")
     }
   };
@@ -107,24 +99,6 @@ const ComputersList = props => {
           </div>
         </div>
         <div className="input-group col-lg">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search by zip"
-            value={searchZip}
-            onChange={onChangeSearchZip}
-          />
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={findByZip}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-        <div className="input-group col-lg">
 
           <select className="col" onChange={onChangeSearchCpu}>
              {cpus.map(cpu => {
@@ -137,7 +111,7 @@ const ComputersList = props => {
             <button
               className="btn btn-outline-secondary"
               type="button"
-              onClick={findByCuisine}
+              onClick={findByCpu}
             >
               Search
             </button>
