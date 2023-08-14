@@ -5,8 +5,8 @@ const baseURL = "https://backend-computer-webshop.vercel.app/api/v1"
 
 class ComputerDataService {
   getAll(page = 0) {
-    return axios.get(`${baseURL}/computers?page=${page}`);
-    //return http.get(`/computers?page=${page}`);
+    //return axios.get(`${baseURL}/computers?page=${page}`);
+    return http.get(`/computers?page=${page}`);
   }
 
   get(id) {
@@ -15,8 +15,8 @@ class ComputerDataService {
   }
 
   find(query, by = "name", page = 0) {
-    return axios.get(`${baseURL}/computers?${by}=${query}&page=${page}`);
-    //return http.get(`/computers?${by}=${query}&page=${page}`);
+    //return axios.get(`${baseURL}/computers?${by}=${query}&page=${page}`);
+    return http.get(`/computers?${by}=${query}&page=${page}`);
   } 
 
   createReview(data) {

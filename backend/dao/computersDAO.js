@@ -25,14 +25,14 @@ export default class ComputersDAO {
     let query
     if (filters) {
       if ("name" in filters) {
-        query = { $text: { $search: filters["name"] } }
+        query = { "name": { $regex: filters["name"], $options: "i" } };
       } else if ("cpu" in filters) {
         query = { "cpu": { $eq: filters["cpu"] } }
       }
     }
 
     let cursor
-    
+
     try {
       cursor = await computers.find(query)
     } catch (e) {
@@ -58,46 +58,46 @@ export default class ComputersDAO {
     try {
       const pipeline = [
         {
-            $match: {
-                _id: new ObjectId(id),
-            },
+          $match: {
+            _id: new ObjectId(id),
+          },
         },
+        {
+          $lookup: {
+            from: "reviews",
+            let: {
+              id: "$_id",
+            },
+            pipeline: [
               {
-                  $lookup: {
-                      from: "reviews",
-                      let: {
-                          id: "$_id",
-                      },
-                      pipeline: [
-                          {
-                              $match: {
-                                  $expr: {
-                                      $eq: ["$computer_id", "$$id"],
-                                  },
-                              },
-                          },
-                          {
-                              $sort: {
-                                  date: -1,
-                              },
-                          },
-                      ],
-                      as: "reviews",
+                $match: {
+                  $expr: {
+                    $eq: ["$computer_id", "$$id"],
                   },
+                },
               },
               {
-                  $addFields: {
-                      reviews: "$reviews",
-                  },
+                $sort: {
+                  date: -1,
+                },
               },
-          ]
+            ],
+            as: "reviews",
+          },
+        },
+        {
+          $addFields: {
+            reviews: "$reviews",
+          },
+        },
+      ]
       return await computers.aggregate(pipeline).next()
     } catch (e) {
       console.error(`Something went wrong in getComputerByID: ${e}`)
       throw e
     }
   }
-  
+
   static async getComputerByCpu() {
     let cpu = []
     try {
