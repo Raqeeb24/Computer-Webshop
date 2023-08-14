@@ -1,4 +1,4 @@
-import express  from "express";
+import express from "express";
 import ComputersCtrl from './computers.controller.js'
 import ComponentsCtrl from './components.controller.js'
 import ReviewsCtrl from "./reviews.controller.js";
@@ -12,9 +12,12 @@ router.route("/cpu").get(ComputersCtrl.apiGetComputerByCpu);
 
 router
     .route("/review")
-    .post(ReviewsCtrl.apiPostReview)
+    .post(ReviewsCtrl.apiPostReview);
     //.put(ComponentsCtrl.apiUpdateComponent)
     //.delete(ComponentsCtrl.apiDeleteComponent)
 
+router
+    .route("/computer")
+    .post(ComputersCtrl.apiPostComputer);
 
 export default router;

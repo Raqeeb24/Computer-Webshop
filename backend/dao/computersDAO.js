@@ -110,7 +110,25 @@ export default class ComputersDAO {
     }
   }
 
+  static async addComputer(computer) {
+    try {
+      const computerDoc = {
+        name: computer.name,
+        cpu: computer.cpu,
+        cpu_cooler: computer.cpu_cooler,
+        mainboard: computer.mainboard,
+        ram: computer.ram,
+        gpu: computer.gpu,
+        ssd: computer.ssd,
+        case: computer.case,
+        power_supply: computer.power_supply,
+        price: computer.price,
+      }
+      return await computers.insertOne(computerDoc)
+    } catch (e) {
+      console.error(`Unable to post review: ${e}`)
+      return { error: e }
+    }
+  }
 
 }
-
-

@@ -17,11 +17,12 @@ export default class ReviewsDAO {
 
   static async addReview(computerId, user, review, date) {
     try {
-      const reviewDoc = { name: user.name,
+      const reviewDoc = { 
+        name: user.name,
           user_id: user._id,
           date: date,
           text: review,
-          _id: ObjectId(computerId), }
+          computer_id: ObjectId(computerId), }
       return await reviews.insertOne(reviewDoc)
     } catch (e) {
       console.error(`Unable to post review: ${e}`)

@@ -52,4 +52,29 @@ export default class ComputersController {
       res.status(500).json({ error: e })
     }
   }
+
+  static async apiPostComputer(req, res, next) {
+    try {
+      console.log(req.body.name + req.body.cpu);
+      const computerInfo = {
+        name: req.body.name,
+        cpu: req.body.cpu,
+        cpu_cooler: req.body.cpu_cooler,
+        mainboard: req.body.mainboard,
+        ram: req.body.ram,
+        gpu: req.body.gpu,
+        ssd: req.body.ssd,
+        case: req.body.case,
+        power_supply: req.body.power_supply,
+        price: req.body.price
+      }
+
+      const ComputerResponse = await ComputersDAO.addComputer(
+        computerInfo
+      )
+      res.json({ status: "success" })
+    } catch (e) {
+      res.status(500).json({ error: e.message })
+    }
+  }
 }

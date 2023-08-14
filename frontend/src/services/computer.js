@@ -1,4 +1,7 @@
 import http from "../http-common";
+import axios from "axios";
+
+const baseURL = "https://backend-computer-webshop-old.vercel.app//api/v1/" // for local usage
 
 class ComputerDataService {
   getAll(page = 0) {
@@ -14,10 +17,12 @@ class ComputerDataService {
   } 
 
   createReview(data) {
-    return http.post("/review-new", data);
+    //return axios.post(`${baseURL}/computers/review-new`, data);
+    return http.post("/computers/review", data);
   }
 
   updateReview(data) {
+    //return axios.put(`${baseURL}/computers/review-edit`, data);
     return http.put("/review-edit", data);
   }
 
