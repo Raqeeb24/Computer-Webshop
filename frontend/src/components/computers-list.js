@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ComputerDataService from "../services/computer";
 import { Link } from "react-router-dom";
+import "./computers-list.css";
 
 const ComputersList = props => {
   const [computers, setComputers] = useState([]);
@@ -124,7 +125,7 @@ const ComputersList = props => {
           const components = `${computer.cpu} ${computer.mainboard}, ${computer.ram}`;
           return (
             <div className="col-lg-4 pb-1">
-              <div className="card">
+              <div className="card custom-card">
                 <div className="card-body">
                   <h5 className="card-title">{computer.name}</h5>
                   <p className="card-text">
@@ -133,7 +134,7 @@ const ComputersList = props => {
                     <strong>GPU: </strong>{computer.gpu}<br/>
                     <strong>Price: </strong>{computer.price}
                   </p>
-                  <div className="row">
+                  <div className="row text-center">
                   <Link to={"/computers/"+computer._id} className="btn btn-primary col-lg-5 mx-1 mb-1">
                     View Product
                   </Link>
