@@ -1,6 +1,73 @@
-.custom-card{
-    background-color: #e4f1fe;
+.custom-card {
+    text-decoration: none;
+    background-color: #e3f2fd;
+    color: #333333;
+    border-width: 2px;
+    border-color: #bbdefb;
+    transition: .25s;
 }
-.whatever{
+
+.custom-card:hover {
+    color: #333333;
+    background-color: #bbdefb;
+    border-color: #bbdefb;
+}
+
+.add-to-cart-button {
+    display: none;
+    background-color: #2196F3;
+    
+    @media (min-width: 1000px) {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+    }
+}
+
+.custom-card:hover .add-to-cart-button {
+    display: block;
+}
+
+.input {
+    border-width: 2px 2px 2px 2px;
+    border-color: #2195f3b1;
+    border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.input:focus {
+    outline: none;
+    border-color: 2195f3b1;
+}
+.input option:checked {
+    background-color: #2195f3b1;
+    color: white;
+}
+
+.search-button {
+    color: #2196F3;
+    border-width: 2px;
+    border-color: #2195f3b1;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    /* top right bottom left
+    border-style: solid dotted inset double;
+    /*border-color: #f00 #0f0 #00f #ff0;*/
+}
+
+.search-button:hover {
+    background-color: #2196F3;
+    color: white;
+    border-color: #2196F3;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .add-to-cart-button {
+        display: block;
+        position: relative;
+    }
+}
+
+
+.whatever {
     background-color: #f0f9ff;
 }

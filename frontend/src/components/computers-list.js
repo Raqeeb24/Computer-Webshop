@@ -5,8 +5,8 @@ import "./computers-list.css";
 
 const ComputersList = props => {
   const [computers, setComputers] = useState([]);
-  const [searchName, setSearchName ] = useState("");
-  const [searchCpu, setSearchCpu ] = useState("");
+  const [searchName, setSearchName] = useState("");
+  const [searchCpu, setSearchCpu] = useState("");
   const [cpus, setCpu] = useState(["All Cpu"]);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const ComputersList = props => {
   const onChangeSearchCpu = e => {
     const searchCpu = e.target.value;
     setSearchCpu(searchCpu);
-    
+
   };
 
   const retrieveComputers = () => {
@@ -30,7 +30,7 @@ const ComputersList = props => {
       .then(response => {
         console.log(response.data);
         setComputers(response.data.computers);
-        
+
       })
       .catch(e => {
         console.log(e);
@@ -84,14 +84,14 @@ const ComputersList = props => {
         <div className="input-group col-lg">
           <input
             type="text"
-            className="form-control"
+            className="form-control input"
             placeholder="Search by name"
             value={searchName}
             onChange={onChangeSearchName}
           />
           <div className="input-group-append">
             <button
-              className="btn btn-outline-secondary"
+              className="btn btn-outline-secondary search-button"
               type="button"
               onClick={findByName}
             >
@@ -100,17 +100,16 @@ const ComputersList = props => {
           </div>
         </div>
         <div className="input-group col-lg">
-
-          <select className="col" onChange={onChangeSearchCpu}>
-             {cpus.map(cpu => {
-               return (
-                 <option value={cpu}> {cpu.substr(0, 20)} </option>
-               )
-             })}
+          <select className="form-control input" onChange={onChangeSearchCpu}>
+            {cpus.map(cpu => {
+              return (
+                <option value={cpu}> {cpu.substr(0, 20)} </option>
+              )
+            })}
           </select>
           <div className="input-group-append">
             <button
-              className="btn btn-outline-secondary"
+              className="btn btn-outline-secondary search-button"
               type="button"
               onClick={findByCpu}
             >
@@ -125,25 +124,22 @@ const ComputersList = props => {
           const components = `${computer.cpu} ${computer.mainboard}, ${computer.ram}`;
           return (
             <div className="col-lg-4 pb-1">
-              <div className="card custom-card">
+              <Link to={"/computers/" + computer._id} className="card custom-card">
                 <div className="card-body">
                   <h5 className="card-title">{computer.name}</h5>
                   <p className="card-text">
-                    <strong>CPU: </strong>{computer.cpu}<br/>
-                    <strong>RAM: </strong>{computer.ram}<br/>
-                    <strong>GPU: </strong>{computer.gpu}<br/>
+                    <strong>CPU: </strong>{computer.cpu}<br />
+                    <strong>RAM: </strong>{computer.ram}<br />
+                    <strong>GPU: </strong>{computer.gpu}<br />
                     <strong>Price: </strong>{computer.price}
                   </p>
-                  <div className="row text-center">
-                  <Link to={"/computers/"+computer._id} className="btn btn-primary col-lg-5 mx-1 mb-1">
-                    View Product
-                  </Link>
-                  <Link to={"#"} className="btn btn-primary col-lg-5 mx-1 mb-1">
-                    Add to cart
-                  </Link>
+                  <div className="row justify-content-center">
+                    <Link to={"#"} className="btn btn-primary col-lg-5 mx-1 mb-1 add-to-cart-button">
+                      Add to cart
+                    </Link>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
           );
         })}
