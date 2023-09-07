@@ -7,7 +7,7 @@ const ComputersList = props => {
   const [computers, setComputers] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [searchCpu, setSearchCpu] = useState("");
-  const [cpus, setCpu] = useState(["All Cpu"]);
+  const [cpus, setCpu] = useState(["Search by CPU"]);
 
   useEffect(() => {
     retrieveComputers();
@@ -143,8 +143,6 @@ const ComputersList = props => {
             </div>
           );
         })}
-
-
       </div>
     </div>
   );

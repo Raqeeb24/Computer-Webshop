@@ -11,6 +11,7 @@ import AddReview from './components/add-review';
 import Login from './components/login';
 import ComputersList from './components/computers-list';
 import AddComputer from './components/add-computer';
+import ShoppingCart from './components/shopping-cart';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -40,16 +41,12 @@ function App() {
                 Login
               </Link>
             )}
-
             <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
             </Nav> 
-            <Nav.Item className='ml-auto'>
-              <Navbar.Text>
-                <div>Shopping cart</div>
-              </Navbar.Text>
-            </Nav.Item>
+            <Nav className='ml-auto'>
+                <Link to={'/shoppingCart'} className="nav-link">Shopping Cart</Link>
+            </Nav>
           </Navbar.Collapse>
-
         </Container>
       </Navbar>
 
@@ -79,6 +76,12 @@ function App() {
             path="/addComputer"
             render={(props) => (
               <AddComputer {...props} login={login} />
+            )}
+          />
+          <Route
+            path="/shoppingCart"
+            render={(props) => (
+              <ShoppingCart {...props}/>
             )}
           />
         </Switch>
