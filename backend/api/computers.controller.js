@@ -55,7 +55,6 @@ export default class ComputersController {
 
   static async apiPostComputer(req, res, next) {
     try {
-      console.log(req.body.name + req.body.cpu);
       const computerInfo = {
         name: req.body.name,
         cpu: req.body.cpu,

@@ -78,74 +78,91 @@ const ComputersList = props => {
     }
   };
 
-  return (
-    <div>
-      <div className="row pb-1">
-        <div className="input-group col-lg">
-          <input
-            type="text"
-            className="form-control input"
-            placeholder="Search by name"
-            value={searchName}
-            onChange={onChangeSearchName}
-          />
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary search-button"
-              type="button"
-              onClick={findByName}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-        <div className="input-group col-lg">
-          <select className="form-control input" onChange={onChangeSearchCpu}>
-            {cpus.map(cpu => {
-              return (
-                <option value={cpu}> {cpu.substr(0, 20)} </option>
-              )
-            })}
-          </select>
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary search-button"
-              type="button"
-              onClick={findByCpu}
-            >
-              Search
-            </button>
-          </div>
+  const handleAddToCart = (computer) => {
+    const data = {
+      item_id: computer._id,
+      name: computer.name,
+      price: computer.price,
+      quantity: 1
+    }
+    ComputerDataService.addToCart(data)
+      .then(response => {
+        console.log(ComputerDataService.getCart);
+      })
+  };
 
-        </div>
-      </div>
-      <div className="row">
-        {computers.map((computer) => {
-          const components = `${computer.cpu} ${computer.mainboard}, ${computer.ram}`;
-          return (
-            <div className="col-lg-4 pb-1">
-              <Link to={"/computers/" + computer._id} className="card custom-card">
-                <div className="card-body">
-                  <h5 className="card-title">{computer.name}</h5>
-                  <p className="card-text">
-                    <strong>CPU: </strong>{computer.cpu}<br />
-                    <strong>RAM: </strong>{computer.ram}<br />
-                    <strong>GPU: </strong>{computer.gpu}<br />
-                    <strong>Price: </strong>{computer.price}
-                  </p>
-                  <div className="row justify-content-center">
-                    <Link to={"#"} className="btn btn-primary col-lg-5 mx-1 mb-1 add-to-cart-button">
-                      Add to cart
-                    </Link>
-                  </div>
-                </div>
-              </Link>
+    return (
+      <div>
+        <div className="row pb-1">
+          <div className="input-group col-lg">
+            <input
+              type="text"
+              className="form-control input"
+              placeholder="Search by name"
+              value={searchName}
+              onChange={onChangeSearchName}
+            />
+            <div className="input-group-append">
+              <button
+                className="btn btn-outline-secondary search-button"
+                type="button"
+                onClick={findByName}
+              >
+                Search
+              </button>
             </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
+          </div>
+          <div className="input-group col-lg">
+            <select className="form-control input" onChange={onChangeSearchCpu}>
+              {cpus.map(cpu => {
+                return (
+                  <option value={cpu}> {cpu.substr(0, 20)} </option>
+                )
+              })}
+            </select>
+            <div className="input-group-append">
+              <button
+                className="btn btn-outline-secondary search-button"
+                type="button"
+                onClick={findByCpu}
+              >
+                Search
+              </button>
+            </div>
 
-export default ComputersList;
+          </div>
+        </div>
+        <div className="row">
+          {computers.map((computer) => {
+            const components = `${computer.cpu} ${computer.mainboard}, ${computer.ram}`;
+            return (
+              <div className="col-lg-4 pb-1">
+                <Link to={"/computers/" + computer._id} className="card custom-card">
+                  <div className="card-body">
+                    <h5 className="card-title">{computer.name}</h5>
+                    <p className="card-text">
+                      <strong>CPU: </strong>{computer.cpu}<br />
+                      <strong>RAM: </strong>{computer.ram}<br />
+                      <strong>GPU: </strong>{computer.gpu}<br />
+                      <strong>Price: </strong>{computer.price}
+                    </p>
+                    <div className="row justify-content-center">
+                      <button onClick={(event) => {
+                          event.preventDefault();
+                          handleAddToCart(computer);
+                        }} 
+                        className="btn btn-primary col-lg-5 mx-1 mb-1 add-to-cart-button">
+                        Add to cart
+                      </button>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  export default ComputersList;

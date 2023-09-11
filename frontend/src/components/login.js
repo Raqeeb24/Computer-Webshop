@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import ComputerDataService from "../services/computer";
+
 
 const Login = props => {
 
@@ -17,6 +19,13 @@ const Login = props => {
   const login = () => {
     props.login(user)
     props.history.push('/');
+  }
+
+  const getCart = () => {
+    ComputerDataService.testretrievesession();
+  }
+  const addToCart = () => {
+    ComputerDataService.testconfiguresession();
   }
 
   return (
@@ -51,6 +60,10 @@ const Login = props => {
         <button onClick={login} className="btn btn-success">
           Login
         </button>
+        <br/>
+        <br/>
+        <button onClick={addToCart}>addtocart</button>
+        <button onClick={getCart}>view cart</button>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import http from "../http-common";
 import axios from "axios";
 
-const baseURL = "https://backend-computer-webshop-old.vercel.app//api/v1/" // for local usage
+const baseURL = "http://localhost:5000/api/v1/" // for local usage
 
 class ComputerDataService {
   getAll(page = 0) {
@@ -38,6 +38,57 @@ class ComputerDataService {
     return http.post(`/computers/computer`, data);
   }
 
+  getCart(){
+    return http.get(`/computers/cart`, {
+      withCredentials: true
+    })
+    .then((response) => {
+      // Handle the response here
+      console.log(response.data);
+    })
+    .catch((error) => {
+      // Handle any errors here
+      console.log(error);
+    });
+  }
+
+  addToCart(data){
+    return http.post(`/computers/cart`, data, {
+      headers: {
+      'Content-Type': 'application/json', // Set the Content-Type header to indicate JSON
+    },
+      withCredentials: true
+    }).then((response) => {
+      // Handle the response here
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      console.error("Status:", error.response.status);
+      console.log("Data:", data);
+    });    
+  }
+
+  testconfiguresession(){
+    return http.post(`/test`, {
+      withCredentials: true
+    })
+    
+  }
+  testretrievesession(){
+    return http.get(`/test-retrieve`, {
+      withCredentials: true
+    })
+    .then((response) => {
+      // Handle the response here
+      console.log(response.data);
+    })
+    .catch((error) => {
+      // Handle any errors here
+      console.log(error);
+    });
+  }
+
 }
 
-export default new ComputerDataService();
+export default new ComputerDataService("");

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ComputerDataServices from "../services/computer";
 import "./shopping-cart.css";
 
 const ShoppingCart = props => {
@@ -24,6 +25,7 @@ const ShoppingCart = props => {
 
 
     const retrieveItems = () => {
+        
         var testItems = [
             {
                 title: "Product 1",
@@ -39,34 +41,43 @@ const ShoppingCart = props => {
             },
         ]
 
-        setItems(testItems);
+        ComputerDataServices.getCart()
+            .then(response => {
+                console.log(response.data);
+                setItems(response.data.cart);
+            })
+            .catch(e => {
+                console.log(e);
+            });
     }
 
     return (
         <>
-            <h2>Your shopping cart</h2><br />
-            <div className="row">
-                {items.map((item) => {
-                    return (
-                        <>
-                            <hr/>
-                            <div className="col">
-                                <div>{item.title}</div>
-                                <div>{item.description}</div>
-                                <div>{item.price}</div>
-                            </div>
-                            <div className="col">
-                                <select value={item.quantity} onChange={onChangeQuantity}>
-                                    {quantityOptions}
-                                </select>
-                            </div>
-                            <div className="col">{item.price * item.quantity}</div>
-                        </>
-                    );
-                })}
-            </div>
+          <h2>Your shopping cart</h2><br />
+          <div className="row">
+            {items.length > 0 ? (
+              items.map((item) => (
+                <div key={item.item_id}>
+                  <hr/>
+                  <div className="col">
+                    <div>{item.name}</div>
+                    <div>{item.item_id}</div>
+                    <div>{item.price}</div>
+                  </div>
+                  <div className="col">
+                    <select value={item.quantity} onChange={onChangeQuantity}>
+                      {quantityOptions}
+                    </select>
+                  </div>
+                  <div className="col">{item.price * item.quantity}</div>
+                </div>
+              ))
+            ) : (
+              <div>Your shopping cart is empty</div>
+            )}
+          </div>
         </>
-    );
+      );      
 }
 
 export default ShoppingCart;

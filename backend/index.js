@@ -3,6 +3,7 @@ import mongodb from 'mongodb';
 import dotenv from 'dotenv';
 import ComputersDAO from'./dao/computersDAO.js'; 
 import ReviewsDAO from './dao/reviewsDAO.js';
+import CartDAO from './dao/cartDAO.js';
 
 dotenv.config();
 const MongoClient = mongodb.MongoClient;
@@ -16,7 +17,6 @@ MongoClient.connect(
         wtimeoutMS: 2500,
         useNewUrlParser: true,
     }
-
 )
     .catch(err => {
         console.log("catch")
@@ -26,6 +26,7 @@ MongoClient.connect(
     .then(async client => {
         await ComputersDAO.injectDB(client)
         await ReviewsDAO.injectDB(client)
+        await CartDAO.injectDB(client)
         app.listen(port, () => {
             console.log(`listening on port ${port}`)
         })
