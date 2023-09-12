@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ComputerDataService from "../services/computer";
 
+//for testing purposes
+import http from "../http-common";
+//
 
 const Login = props => {
 
@@ -28,8 +31,40 @@ const Login = props => {
     ComputerDataService.testconfiguresession();
   }
 
+  //testing content
+  const [message, setMessage] = useState('');
+
+  // Function to send a POST request to set session data
+  const setSessionData = async () => {
+    try {
+      const data = {
+        name: "yesssss post"
+      }
+      await http.post(`/test`, data, { withCredentials: true }); // Include credentials
+      setMessage('Session data set successfully');
+    } catch (error) {
+      console.error('Error setting session data:', error);
+    }
+  };
+
+  // Function to send a GET request to retrieve session data
+  const getSessionData = async () => {
+    try {
+      const response = await http.get('/test', { withCredentials: true }); // Include credentials
+      setMessage(response.data.message);
+    } catch (error) {
+      console.error('Error getting session data:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Load session data when the component mounts
+    getSessionData();
+  }, []);
+
+
   return (
-    <div className="submit-form">
+    < div className = "submit-form" >
       <div>
         <div className="form-group">
           <label htmlFor="user">Username</label>
@@ -60,12 +95,23 @@ const Login = props => {
         <button onClick={login} className="btn btn-success">
           Login
         </button>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <button onClick={addToCart}>addtocart</button>
         <button onClick={getCart}>view cart</button>
+        <br />
+        <br />
+
+
+        <div>
+          <h1>Session Test</h1>
+          <button onClick={setSessionData}>Set Session Data</button>
+          <p>Session Message: {message}</p>
+        </div>
+
+
       </div>
-    </div>
+    </div >
   );
 };
 
