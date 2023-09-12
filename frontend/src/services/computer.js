@@ -73,20 +73,31 @@ class ComputerDataService {
     return http.post(`/test`, {
       withCredentials: true
     })
-    
-  }
-  testretrievesession(){
-    return http.get(`/test-retrieve`, {
-      withCredentials: true
-    })
     .then((response) => {
       // Handle the response here
       console.log(response.data);
     })
     .catch((error) => {
-      // Handle any errors here
-      console.log(error);
-    });
+      console.error("Error:", error);
+      console.error("Status:", error.response.status);
+    });    
+    
+  }
+  testretrievesession(){
+    axios.get(`${baseURL}test-retrieve`)
+  .then(response => {
+    const testData = response.data.message;
+    if (testData === 'No data found in session.') {
+      // Handle the case where session data is missing
+      console.error('Session data not found.');
+    } else {
+      // Handle the case where session data is present
+      console.log('Session data retrieved:', testData);
+    }
+  })
+  .catch(error => {
+    console.error('Error retrieving session data:', error);
+  });
   }
 
 }

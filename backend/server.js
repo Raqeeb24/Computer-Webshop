@@ -10,13 +10,13 @@ const app = express();
 const MongoStore = connectMongoDBSession(session);
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: process.env.ORIGIN,
   methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
   credentials: true
 }));
 
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", process.env.ORIGIN);
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Expose-Headers", "Set-Cookie");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -35,18 +35,23 @@ app.use(session({
     collection: "sessions"
   }),
   cookie: {
-    sameSite: 'strict',
     httpOnly: true,
-    maxAge: Date.UTC(2023, 8, 31, 0, 0, 0, 0) - Date.now(),
-    secure: false
+    maxAge: 360000,
+    secure: true,
+    sameSite: 'strict'
   }
 }));
 
 app.use("/api/v1/computers", computers);
 
 app.post('/api/v1/test', (req, res) => {
-  req.session.testData = 'Hello, session!';
-  res.json({ message: 'Data stored in session.' });
+  try {
+    req.session.testData = 'Hello, session!';
+    res.json({ message: 'Data stored in session.' });
+  } catch (error) {
+    console.error('Error setting session data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 app.get('/api/v1/test-retrieve', (req, res) => {
