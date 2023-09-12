@@ -84,7 +84,9 @@ class ComputerDataService {
     
   }
   testretrievesession(){
-    axios.get(`${baseURL}test-retrieve`)
+    return http.get(`/test-retrieve`, {
+      withCredentials: true
+    })
   .then(response => {
     const testData = response.data.message;
     if (testData === 'No data found in session.') {
