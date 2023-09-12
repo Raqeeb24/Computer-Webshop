@@ -8,6 +8,7 @@ import connectMongoDBSession from 'connect-mongodb-session';
 dotenv.config();
 const app = express();
 const MongoStore = connectMongoDBSession(session);
+const NODE_ENV = process.env.NODE_ENV;
 
 app.use(cors({
   origin: process.env.ORIGIN,
@@ -35,7 +36,8 @@ app.use(session({
   cookie: {
     httpOnly: true,
     maxAge: 9000000,
-    secure: process.env.NODE_ENV === 'production'
+    secure: NODE_ENV === 'production',
+    sameSite: NODE_ENV === 'production' ? 'none' : 'lax'
   }
 }));
 
