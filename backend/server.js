@@ -53,6 +53,7 @@ app.post('/api/v1/test', (req, res) => {
 
 app.get('/api/v1/test', (req, res) => {
   const testDAta = req.session.testData || "no data found";
+  console.log(`production: ${process.env.NODE_ENV === 'production'}`);
   res.json({message: testDAta});
 });
 
