@@ -44,7 +44,6 @@ app.use(session({
 
 app.use(express.json());
 
-
 app.post('/api/v1/test', (req, res) => {
   try {
       req.session.testData = req.body.name;
