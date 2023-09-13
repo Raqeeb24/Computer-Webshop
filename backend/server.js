@@ -8,6 +8,8 @@ import connectMongoDBSession from 'connect-mongodb-session';
 dotenv.config();
 const app = express();
 const MongoStore = connectMongoDBSession(session);
+const NODE_ENV = process.env.NODE_ENV;
+const SAME_SITE = (NODE_ENV === 'production') ? 'none' : 'lax';
 
 app.use(cors({
   origin: process.env.ORIGIN,
@@ -35,7 +37,8 @@ app.use(session({
   cookie: {
     httpOnly: true,
     maxAge: 9000000,
-    secure: process.env.NODE_ENV === 'production'
+    secure: NODE_ENV === 'production',
+    sameSite: SAME_SITE
   }
 }));
 
@@ -54,6 +57,7 @@ app.post('/api/v1/test', (req, res) => {
 app.get('/api/v1/test', (req, res) => {
   const testDAta = req.session.testData || "no data found";
   console.log(`production: ${process.env.NODE_ENV === 'production'}`);
+  console.log(SAME_SITE);
   res.json({message: testDAta});
 });
 
