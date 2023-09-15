@@ -5,6 +5,8 @@ import computers from './api/computers.route.js'
 import session from 'express-session';
 import connectMongoDBSession from 'connect-mongodb-session';
 
+import path from 'path'; 
+
 dotenv.config();
 const app = express();
 const MongoStore = connectMongoDBSession(session);
