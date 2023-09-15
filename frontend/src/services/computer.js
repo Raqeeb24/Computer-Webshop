@@ -1,7 +1,4 @@
 import http from "../http-common";
-import axios from "axios";
-
-const baseURL = "http://localhost:5000/api/v1/" // for local usage
 
 class ComputerDataService {
   getAll(page = 0) {
