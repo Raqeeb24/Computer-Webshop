@@ -7,8 +7,8 @@ import CartController from "./cart.controller.js";
 
 const router = express.Router();
 
-router.route("/").get(ComputersCtrl.apiGetComputers);
-router.route("/id/:id").get(ComputersCtrl.apiGetComputerById);
+router.route("/computers/").get(ComputersCtrl.apiGetComputers);
+router.route("/computers/id/:id").get(ComputersCtrl.apiGetComputerById);
 router.route("/cpu").get(ComputersCtrl.apiGetComputerByCpu);
 router.route("/addToCart").post(CartController.postCart);
 

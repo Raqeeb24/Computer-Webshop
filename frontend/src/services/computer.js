@@ -28,15 +28,16 @@ class ComputerDataService {
   }
 
   getCpu(id) {
-    return http.get(`/computers/cpu`);
+    return http.get(`/cpu`);
   }
 
   createComputer(data){
-    return http.post(`/computers/computer`, data);
+    return http.post(`/computer`, data);
   }
 
+  
   getCart(){
-    return http.get(`/computers/cart`, {
+    return http.get(`/cart`, {
       withCredentials: true
     })
     .then((response) => {
@@ -49,54 +50,30 @@ class ComputerDataService {
     });
   }
 
-  addToCart(data){
-    return http.post(`/computers/cart`, data, {
-      headers: {
-      'Content-Type': 'application/json', // Set the Content-Type header to indicate JSON
-    },
-      withCredentials: true
-    }).then((response) => {
-      // Handle the response here
+  async addToCart(data){
+    try {
+      const response = await http.post(`/cart`, data, {
+        headers: {
+          'Content-Type': 'application/json', // Set the Content-Type header to indicate JSON
+        },
+        withCredentials: true
+      });
       console.log(response.data);
-    })
-    .catch((error) => {
+      return response;
+    } catch (error) {
       console.error("Error:", error);
       console.error("Status:", error.response.status);
       console.log("Data:", data);
-    });    
+    }    
   }
 
-  testconfiguresession(){
-    return http.post(`/test`, {
-      withCredentials: true
-    })
-    .then((response) => {
-      // Handle the response here
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      console.error("Status:", error.response.status);
-    });    
-    
+  testconfiguresession(data){
+    return http.post(`/test`, data, { withCredentials: true }); 
   }
-  testretrievesession(){
-    return http.get(`/test-retrieve`, {
+  testretrievesession() {
+    return http.get(`/test`, {
       withCredentials: true
     })
-  .then(response => {
-    const testData = response.data.message;
-    if (testData === 'No data found in session.') {
-      // Handle the case where session data is missing
-      console.error('Session data not found.');
-    } else {
-      // Handle the case where session data is present
-      console.log('Session data retrieved:', testData);
-    }
-  })
-  .catch(error => {
-    console.error('Error retrieving session data:', error);
-  });
   }
 
 }

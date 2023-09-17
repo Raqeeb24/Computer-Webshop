@@ -63,7 +63,7 @@ app.get('/api/test', (req, res) => {
 });
 
 
-app.use("/api/computers", computers);
+app.use("/api", computers);
 
 const __dirname = path.resolve();
 
