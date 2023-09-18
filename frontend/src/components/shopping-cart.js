@@ -18,28 +18,13 @@ const ShoppingCart = props => {
 
     const onChangeQuantity = (e) => {
         console.log("qunatiy before:", quantity);
-        const quantity = e.target.value;
-        setQuantity(quantity);
+        const q = e.target.value;
+        setQuantity(q);
         console.log("quantity after:", quantity);
     }
 
 
     const retrieveItems = () => {
-        
-        var testItems = [
-            {
-                title: "Product 1",
-                description: "description 1",
-                quantity: 1,
-                price: 12.00
-            },
-            {
-                title: "Product 2",
-                description: "description 2",
-                quantity: 2,
-                price: 11.00
-            },
-        ]
 
         ComputerDataServices.getCart()
             .then(response => {

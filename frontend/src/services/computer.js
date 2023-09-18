@@ -66,37 +66,18 @@ class ComputerDataService {
     });    
   }
 
-  testconfiguresession(){
-    return http.post(`/test`, {
-      withCredentials: true
-    })
-    .then((response) => {
-      // Handle the response here
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      console.error("Status:", error.response.status);
-    });    
-    
+  async testconfiguresession(data){
+    try {
+      await http.post(`/test`, data, {withCredentials: true}); // Include credentials
+    } catch (error) {
+      console.error('Error setting session data:', error);
+    }
   }
   testretrievesession(){
-    return http.get(`/test-retrieve`, {
+    const response = http.get(`/test`, {
       withCredentials: true
     })
-  .then(response => {
-    const testData = response.data.message;
-    if (testData === 'No data found in session.') {
-      // Handle the case where session data is missing
-      console.error('Session data not found.');
-    } else {
-      // Handle the case where session data is present
-      console.log('Session data retrieved:', testData);
-    }
-  })
-  .catch(error => {
-    console.error('Error retrieving session data:', error);
-  });
+    return response;
   }
 
 }

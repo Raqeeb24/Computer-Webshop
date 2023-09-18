@@ -24,9 +24,6 @@ function AddComputer() {
 
     const saveComptuer = (e) => {
         e.preventDefault();
-        var data = {
-            computer: computerInfo
-        };
         
         ComputerDataService.createComputer(computerInfo)
         .then(response => {

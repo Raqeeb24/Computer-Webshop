@@ -40,8 +40,8 @@ const Login = props => {
       const data = {
         name: "yesssss post"
       }
-      await http.post(`/test`, data, { withCredentials: true }); // Include credentials
-      setMessage('Session data set successfully');
+      await ComputerDataService.testconfiguresession(data);
+      setMessage("success post");
     } catch (error) {
       console.error('Error setting session data:', error);
     }
@@ -50,7 +50,7 @@ const Login = props => {
   // Function to send a GET request to retrieve session data
   const getSessionData = async () => {
     try {
-      const response = await http.get('/test', { withCredentials: true }); // Include credentials
+      const response = await ComputerDataService.testretrievesession();
       setMessage(response.data.message);
     } catch (error) {
       console.error('Error getting session data:', error);

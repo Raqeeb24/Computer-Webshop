@@ -31,16 +31,15 @@ app.use(session({
   name: "cart.sid",
   secret: process.env.TOKEN,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   store: new MongoStore({
     uri: process.env.FULL_URI,
     collection: "sessions"
   }),
   cookie: {
-    httpOnly: true,
     maxAge: 9000000,
     secure: NODE_ENV === 'production',
-    sameSite: SAME_SITE
+    httpOnly: true
   }
 }));
 
@@ -48,18 +47,17 @@ app.use(express.json());
 
 app.post('/api/test', (req, res) => {
   try {
-    req.session.testData = req.body.name;
-    res.json({ message: "DAta stored" });
+      req.session.testData = req.body.name;
+      res.json({message: "DAta stored"});
   } catch (e) {
-    console.log(`Failed to post: ${e}`);
+      console.log(`Failed to post: ${e}`);
   }
 });
 
 app.get('/api/test', (req, res) => {
   const testDAta = req.session.testData || "no data found";
-  console.log(`production: ${process.env.NODE_ENV === 'production'}`);
-  console.log(SAME_SITE);
-  res.json({ message: testDAta });
+  console.log(`node_env: ${NODE_ENV}`);
+  res.json({message: testDAta});
 });
 
 
@@ -69,9 +67,9 @@ const __dirname = path.resolve();
 
 if (process.env.NODE_ENV === 'production') {
   //*Set static folder up in production
-  app.use(express.static('frontend/build'));
+  app.use(express.static('../frontend/build'));
 
-  app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')));
+  app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, '..' ,'frontend', 'build', 'index.html')));
 } else {
   app.use("*", (req, res) => res.status(404).json({ error: "not found!!!" }));
 
