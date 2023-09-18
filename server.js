@@ -65,7 +65,7 @@ app.use("/api/computers", computers);
 
 const __dirname = path.resolve();
 
-if (process.env.NODE_ENV === undefined) {
+if (process.env.NODE_ENV === 'production') {
   //*Set static folder up in production
   app.use(express.static(path.join(__dirname, './frontend/build')));
 
