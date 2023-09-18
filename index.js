@@ -1,9 +1,9 @@
 import app from './server.js';
 import mongodb from 'mongodb';
 import dotenv from 'dotenv';
-import ComputersDAO from'./dao/computersDAO.js'; 
-import ReviewsDAO from './dao/reviewsDAO.js';
-import CartDAO from './dao/cartDAO.js';
+import ComputersDAO from'./backend/dao/computersDAO.js'; 
+import ReviewsDAO from './backend/dao/reviewsDAO.js';
+import CartDAO from './backend/dao/cartDAO.js';
 
 dotenv.config();
 const MongoClient = mongodb.MongoClient;

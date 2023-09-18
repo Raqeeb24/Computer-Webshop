@@ -11,7 +11,7 @@ class ComputerDataService {
 
   find(query, by = "name", page = 0) {
     return http.get(`/computers?${by}=${query}&page=${page}`);
-  } 
+  }
 
   createReview(data) {
     //return axios.post(`${baseURL}/computers/review-new`, data);
@@ -24,56 +24,47 @@ class ComputerDataService {
   }
 
   deleteReview(id, userId) {
-    return http.delete(`/review-delete?id=${id}`, {data:{user_id: userId}});
+    return http.delete(`/review-delete?id=${id}`, { data: { user_id: userId } });
   }
 
   getCpu(id) {
     return http.get(`/computers/cpu`);
   }
 
-  createComputer(data){
+  createComputer(data) {
     return http.post(`/computers/computer`, data);
   }
 
-  getCart(){
-    return http.get(`/computers/cart`, {
+  getCart() {
+    return http.get('/computers/cart', {
       withCredentials: true
     })
-    .then((response) => {
-      // Handle the response here
-      console.log(response.data);
+    .then(response => {
+      // Assuming the server returns the cart data directly
+      console.log(`idk: ${response.data}`)
+      return response.data;
     })
-    .catch((error) => {
+    .catch(error => {
       // Handle any errors here
       console.log(error);
+      throw error; // Rethrow the error to be caught by the caller
     });
   }
 
-  addToCart(data){
+  addToCart(data) {
     return http.post(`/computers/cart`, data, {
-      headers: {
-      'Content-Type': 'application/json', // Set the Content-Type header to indicate JSON
-    },
       withCredentials: true
-    }).then((response) => {
-      // Handle the response here
-      console.log(response.data);
     })
-    .catch((error) => {
-      console.error("Error:", error);
-      console.error("Status:", error.response.status);
-      console.log("Data:", data);
-    });    
   }
 
-  async testconfiguresession(data){
+  async testconfiguresession(data) {
     try {
-      await http.post(`/test`, data, {withCredentials: true}); // Include credentials
+      await http.post(`/test`, data, { withCredentials: true }); // Include credentials
     } catch (error) {
       console.error('Error setting session data:', error);
     }
   }
-  testretrievesession(){
+  testretrievesession() {
     const response = http.get(`/test`, {
       withCredentials: true
     })

@@ -5,6 +5,7 @@ import "./computers-list.css";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import httpCommon from "../http-common";
 
 const ComputersList = props => {
   const [loading, setLoading] = useState(true);
@@ -84,17 +85,23 @@ const ComputersList = props => {
     }
   };
 
-  const handleAddToCart = (computer) => {
-    const data = {
-      item_id: computer._id,
-      name: computer.name,
-      price: computer.price,
-      quantity: 1
+  const handleAddToCart = async (computer) => {
+    try {
+      const data = {
+        item_id: computer._id,
+        name: computer.name,
+        price: computer.price,
+        quantity: 1
+      };
+
+      const response = await httpCommon.post('/computers/cart', { data }, { withCredentials: true});
+      const updatedCart = response.data;
+
+      console.log(`Successfully added ${computer.name} to cart`);
+      console.log('Updated Cart:', updatedCart);
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
     }
-    ComputerDataService.addToCart(data)
-      .then(response => {
-        console.log(ComputerDataService.getCart);
-      })
   };
 
   return (

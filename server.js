@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import computers from './api/computers.route.js'
+import computers from './backend/api/computers.route.js'
 import session from 'express-session';
 import connectMongoDBSession from 'connect-mongodb-session';
 
@@ -20,7 +20,6 @@ app.use(cors({
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.ORIGIN);
   res.header("Access-Control-Allow-Credentials", "true");
-  //res.header("Access-Control-Expose-Headers", "Set-Cookie");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
@@ -51,7 +50,7 @@ app.use(express.static(path.join(__dirname, 'frontend/build')));
 app.post('/api/test', (req, res) => {
   try {
     req.session.testData = req.body.name;
-    res.json({ message: "DAta stored" });
+    res.json({ message: "Data stored" });
   } catch (e) {
     console.log(`Failed to post: ${e}`);
   }

@@ -12,6 +12,7 @@ import Login from './components/login';
 import ComputersList from './components/computers-list';
 import AddComputer from './components/add-computer';
 import ShoppingCart from './components/shopping-cart';
+import Test from './components/test';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -31,20 +32,20 @@ function App() {
           <Navbar.Toggle className='justify-content-end' aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-            <Link to={'/computers'} className='nav-link'>Computers</Link>
-            {user ? (
-              <a href={logout} className="nav-link" style={{ cursor: 'pointer' }}>
-                Logout {user.name}
-              </a>
-            ) : (
-              <Link to={"/login"} className="nav-link">
-                Login
-              </Link>
-            )}
-            <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
-            </Nav> 
+              <Link to={'/computers'} className='nav-link'>Computers</Link>
+              {user ? (
+                <a href={logout} className="nav-link" style={{ cursor: 'pointer' }}>
+                  Logout {user.name}
+                </a>
+              ) : (
+                <Link to={"/login"} className="nav-link">
+                  Login
+                </Link>
+              )}
+              <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
+            </Nav>
             <Nav className='ml-auto'>
-                <Link to={'/shoppingCart'} className="nav-link">Shopping Cart</Link>
+              <Link to={'/shoppingCart'} className="nav-link">Shopping Cart</Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -81,7 +82,13 @@ function App() {
           <Route
             path="/shoppingCart"
             render={(props) => (
-              <ShoppingCart {...props}/>
+              <ShoppingCart {...props} />
+            )}
+          />
+          <Route
+            path="/test"
+            render={() => (
+              <Test />
             )}
           />
         </Switch>
