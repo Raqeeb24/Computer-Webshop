@@ -45,6 +45,9 @@ app.use(session({
 
 app.use(express.json());
 
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+
 app.post('/api/test', (req, res) => {
   try {
       req.session.testData = req.body.name;
@@ -63,11 +66,10 @@ app.get('/api/test', (req, res) => {
 
 app.use("/api/computers", computers);
 
-const __dirname = path.resolve();
+
 
 if (process.env.NODE_ENV === 'production') {
   //*Set static folder up in production
-  app.use(express.static(path.join(__dirname, './frontend/build')));
 
   app.get('*', (req, res) => res.sendFile(path.resolve(__dirname ,'frontend', 'build', 'index.html')));
 } else {
