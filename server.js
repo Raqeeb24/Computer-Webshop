@@ -5,7 +5,7 @@ import computers from './api/computers.route.js'
 import session from 'express-session';
 import connectMongoDBSession from 'connect-mongodb-session';
 
-import path from 'path'; 
+import path from 'path';
 
 dotenv.config();
 const app = express();
@@ -50,31 +50,22 @@ app.use(express.static(path.join(__dirname, 'frontend/build')));
 
 app.post('/api/test', (req, res) => {
   try {
-      req.session.testData = req.body.name;
-      res.json({message: "DAta stored"});
+    req.session.testData = req.body.name;
+    res.json({ message: "DAta stored" });
   } catch (e) {
-      console.log(`Failed to post: ${e}`);
+    console.log(`Failed to post: ${e}`);
   }
 });
 
 app.get('/api/test', (req, res) => {
   const testDAta = req.session.testData || "no data found";
   console.log(`node_env: ${process.env.NODE_ENV}`);
-  res.json({message: testDAta});
+  res.json({ message: testDAta });
 });
 
 
 app.use("/api/computers", computers);
 
-
-
-if (process.env.NODE_ENV === 'production') {
-  //*Set static folder up in production
-
-  app.get('*', (req, res) => res.sendFile(path.resolve(__dirname ,'frontend', 'build', 'index.html')));
-} else {
-  app.use("*", (req, res) => res.status(404).json({ error: "not found!!!" }));
-
-}
+app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')));
 
 export default app;
