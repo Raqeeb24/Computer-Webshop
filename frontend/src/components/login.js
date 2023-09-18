@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ComputerDataService from "../services/computer";
 
 //for testing purposes
-import http from "../http-common";
+//import http from "../http-common";
 //
 
 const Login = props => {
