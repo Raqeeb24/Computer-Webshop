@@ -10,8 +10,6 @@ import path from 'path';
 dotenv.config();
 const app = express();
 const MongoStore = connectMongoDBSession(session);
-const NODE_ENV = process.env.NODE_ENV;
-const SAME_SITE = (NODE_ENV === 'production') ? 'none' : 'lax';
 
 app.use(cors({
   origin: process.env.ORIGIN,
@@ -27,6 +25,8 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.set("trust proxy", 1);
+
 app.use(session({
   name: "cart.sid",
   secret: process.env.TOKEN,
@@ -38,7 +38,7 @@ app.use(session({
   }),
   cookie: {
     maxAge: 9000000,
-    secure: NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true
   }
 }));
@@ -59,7 +59,7 @@ app.post('/api/test', (req, res) => {
 
 app.get('/api/test', (req, res) => {
   const testDAta = req.session.testData || "no data found";
-  console.log(`node_env: ${NODE_ENV}`);
+  console.log(`node_env: ${process.env.NODE_ENV}`);
   res.json({message: testDAta});
 });
 
