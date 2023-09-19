@@ -40,7 +40,6 @@ class ComputerDataService {
       withCredentials: true
     })
     .then(response => {
-      // Assuming the server returns the cart data directly
       console.log(`idk: ${response.data}`)
       return response.data;
     })
@@ -59,7 +58,7 @@ class ComputerDataService {
 
   async testconfiguresession(data) {
     try {
-      await http.post(`/test`, data, { withCredentials: true }); // Include credentials
+      await http.post(`/test`, data, { withCredentials: true });
     } catch (error) {
       console.error('Error setting session data:', error);
     }

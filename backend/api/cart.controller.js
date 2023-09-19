@@ -3,19 +3,29 @@
 export default class CartController {
     static async apiPostCart(req, res, next) {
         try {
-            const cart  = { 
-                item_id: req.body.data.item_id, 
-                name: req.body.data.name,
-                price: req.body.data.price,
-                quantity: req.body.data.quantity
+            const cartItem = {
+                item_id: req.body.item_id,
+                name: req.body.name,
+                price: req.body.price,
+                quantity: req.body.quantity
             };
 
             console.table(req.body);
-            
+
             if (!req.session.cart) {
                 req.session.cart = [];
             }
-            req.session.cart.push(cart);
+
+            const existingCartItemIndex = req.session.cart.findIndex(
+                (item) => item.item_id === cartItem.item_id
+            );
+
+            if (existingCartItemIndex !== -1) {
+                req.session.cart[existingCartItemIndex].quantity += cartItem.quantity;
+            } else {
+                req.session.cart.push(cartItem);
+            }
+
             res.json(req.session.cart);
         } catch (error) {
             console.error('Error adding item to cart:', error);

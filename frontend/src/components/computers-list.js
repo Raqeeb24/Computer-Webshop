@@ -18,7 +18,6 @@ const ComputersList = props => {
     setLoading(true);
     retrieveCpu();
     retrieveComputers();
-    setLoading(false);
   }, []);
 
   const onChangeSearchName = e => {
@@ -37,7 +36,7 @@ const ComputersList = props => {
       .then(response => {
         console.log(response.data);
         setComputers(response.data.computers);
-
+        setLoading(false);
       })
       .catch(e => {
         console.log(e);
@@ -94,7 +93,7 @@ const ComputersList = props => {
         quantity: 1
       };
 
-      const response = await httpCommon.post('/computers/cart', { data }, { withCredentials: true});
+      const response = await ComputerDataService.addToCart(data);
       const updatedCart = response.data;
 
       console.log(`Successfully added ${computer.name} to cart`);
@@ -148,7 +147,7 @@ const ComputersList = props => {
       <div className="row">
         {loading ? (
           Array.from({ length: 9 }).map((index) => (
-            <div className="col-lg-4 pb-1" key={index}>
+            <div className="col-xl-4 col-md-6 pb-2" key={index}>
               <div className="card">
                 <div className="card-body">
                   <h5 className="card-title">
@@ -166,7 +165,7 @@ const ComputersList = props => {
           ))
         ) : (
           computers.map((computer) => (
-            <div className="col-lg-4 pb-1">
+            <div className="col-xl-4 col-md-6 pb-2">
               <Link to={"/computers/" + computer._id} className="card custom-card">
                 <div className="card-body">
                   <h5 className="card-title">{computer.name || <Skeleton />}</h5>
