@@ -5,7 +5,6 @@ import "./computers-list.css";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import httpCommon from "../http-common";
 
 const ComputersList = props => {
   const [loading, setLoading] = useState(true);
