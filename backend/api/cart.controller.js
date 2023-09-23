@@ -1,6 +1,15 @@
-//import CartDAO from "../dao/cartDAO.js";
+import CartDAO from "../dao/cartDAO.js";
 
 export default class CartController {
+    static async apiGetCart(req, res, next) {
+        try {
+            res.json(req.session.cart || []);
+        } catch (error) {
+            console.error('Error getting cart:', error);
+            res.status(500).json({ error: 'Unable to retrieve cart' });
+        }
+    }
+
     static async apiPostCart(req, res, next) {
         try {
             const cartItem = {
@@ -9,7 +18,6 @@ export default class CartController {
                 price: req.body.price,
                 quantity: req.body.quantity
             };
-
             console.table(req.body);
 
             if (!req.session.cart) {
@@ -21,7 +29,13 @@ export default class CartController {
             );
 
             if (existingCartItemIndex !== -1) {
-                req.session.cart[existingCartItemIndex].quantity += cartItem.quantity;
+                const existingCartItem = req.session.cart[existingCartItemIndex];
+                if (existingCartItem.quantity < 10) {
+                    existingCartItem.quantity += cartItem.quantity;
+                } else {
+                    console.log("the maximum amount of 10 is reached");
+                    return;
+                }
             } else {
                 req.session.cart.push(cartItem);
             }
@@ -32,26 +46,37 @@ export default class CartController {
             res.status(500).json({ error: 'Unable to add item to cart' });
         }
     }
-    static async getCart(req, res, next) {
+
+    static apiUpdateCart(req, res) {
         try {
-            res.json(req.session.cart || []);
-        } catch (error) {
-            console.error('Error getting cart:', error);
-            res.status(500).json({ error: 'Unable to retrieve cart' });
-        }
-    }
-    static async postCart(req, res) {
-        try {
-            const cart = {
+            const cartItem = {
                 item_id: req.body.item_id,
-                name: req.body.name,
-                price: req.body.price,
                 quantity: req.body.quantity
             };
-            req.session.cart = cart;
-            res.json({ message: "post success" });
+
+            const existingCartItemIndex = req.session.cart.findIndex(
+                (item) => item.item_id === cartItem.item_id
+            );
+
+            if (cartItem.quantity > 0) {
+                console.log("cartitem q:", cartItem.quantity);
+                req.session.cart[existingCartItemIndex].quantity = cartItem.quantity;
+            } else {
+                req.session.cart.splice(existingCartItemIndex, 1);
+            }
+
+            res.json({ message: "put success" });
         } catch (e) {
             console.log(`Unable to post post cart: ${e}}`);
+        }
+    }
+
+    static apiDeleteCart(req, res) {
+        try {
+            delete req.session.cart;
+            res.json({ message: "put success" });
+        } catch (e) {
+            console.log(`Unable to empty cart: ${e}}`);
         }
     }
 }

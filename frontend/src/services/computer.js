@@ -53,7 +53,19 @@ class ComputerDataService {
   addToCart(data) {
     return http.post(`/computers/cart`, data, {
       withCredentials: true
-    })
+    });
+  }
+
+  updateCart(data) {
+    return http.put('/computers/cart', data, {
+      withCredentials: true
+    });
+  }
+
+  deleteCart(){
+    return http.delete('/computers/cart', {
+      withCredentials: true
+    });
   }
 
   async testconfiguresession(data) {

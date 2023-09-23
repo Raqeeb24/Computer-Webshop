@@ -13,7 +13,7 @@ const MongoStore = connectMongoDBSession(session);
 
 app.use(cors({
   origin: process.env.ORIGIN,
-  methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+  methods: ["POST", "PUT", "GET", "DELETE", "OPTIONS", "HEAD"],
   credentials: true
 }));
 

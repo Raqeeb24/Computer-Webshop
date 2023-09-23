@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import ComputerDataServices from "../services/computer";
+import ComputerDataService from "../services/computer";
 import "./shopping-cart.css";
 
 const ShoppingCart = props => {
   const [items, setItems] = useState([]);
-  const [quantity, setQuantity] = useState();
   const [total, setTotal] = useState();
 
   const quantityOptions = [];
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 0; i <= 10; i++) {
     quantityOptions.push(<option key={i} value={i}>{i}</option>)
   }
 
@@ -22,15 +21,27 @@ const ShoppingCart = props => {
   }, [items]);
 
 
-  const onChangeQuantity = (e) => {
-    console.log("qunatiy before:", quantity);
-    const q = e.target.value;
-    setQuantity(q);
-    console.log("quantity after:", quantity);
+  const onChangeQuantity = async (e, item_id) => {
+    const quantity = e.target.value;
+    console.log(`q: ${e.target.value}`);
+    try {
+      const data = {
+        item_id: item_id,
+        quantity: quantity
+      };
+
+      const response = await ComputerDataService.updateCart(data);
+      const updatedCart = response.data;
+
+      console.log('Updated Cart:', updatedCart);
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
+    retrieveItems();
   }
 
   const retrieveItems = () => {
-    ComputerDataServices.getCart()
+    ComputerDataService.getCart()
       .then(cart => {
         console.log(`cart: ${cart}`);
         setItems(cart);
@@ -59,17 +70,22 @@ const ShoppingCart = props => {
                 <div>{item.price}</div>
               </div>
               <div className="col-2 align-self-center">
-                <select value={item.quantity} onChange={onChangeQuantity}>
+                <select value={item.quantity} onChange={(e) => onChangeQuantity(e, item.item_id)}>
                   {quantityOptions}
                 </select>
               </div>
-              <div className="col-2 align-self-end fw-semibold">{item.price * item.quantity}</div>
+              <div className="col-2 align-self-end fw-semibold">{parseFloat(item.price * item.quantity).toFixed(2)}</div>
             </div>
           ))}
           <hr />
           <div className="row fs-5">
             <div className="col-3 fw-bolder">Total</div>
             <div className="col-9 text-end fw-bolder" style={{ float: "right !important" }}>CHF {total}</div>
+          </div>
+          <div className="row fs-5">
+            <div className="col text-end">
+              <button className="btn btn-link" onClick={() => ComputerDataService.deleteCart().then(retrieveItems)}>clear cart</button>
+            </div>
           </div>
         </div>
       ) : (

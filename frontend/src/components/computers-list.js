@@ -77,8 +77,6 @@ const ComputersList = props => {
     if (searchCpu === "Search by CPU") {
       refreshList();
     } else {
-      console.log("cpu...")
-      console.log(searchCpu)
       find(searchCpu, "cpu")
     }
   };
@@ -174,12 +172,12 @@ const ComputersList = props => {
                     <strong>GPU: </strong>{computer.gpu}<br />
                     <strong>Price: </strong>{computer.price}
                   </p>
-                  <div className="row justify-content-center">
+                  <div className="text-end">
                     <button onClick={(event) => {
                       event.preventDefault();
                       handleAddToCart(computer);
                     }}
-                      className="btn btn-primary col-lg-5 mx-1 mb-1 add-to-cart-button">
+                      className="card-link btn btn-primary btn-sm col-md-4 mx-1 mb-1 add-to-cart-button">
                       Add to cart
                     </button>
                   </div>

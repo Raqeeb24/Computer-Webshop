@@ -10,7 +10,6 @@ const router = express.Router();
 router.route("/").get(ComputersCtrl.apiGetComputers);
 router.route("/id/:id").get(ComputersCtrl.apiGetComputerById);
 router.route("/cpu").get(ComputersCtrl.apiGetComputerByCpu);
-router.route("/addToCart").post(CartController.postCart);
 
 router
     .route("/review")
@@ -24,7 +23,9 @@ router
 
 router
     .route("/cart")
-    .get(CartController.getCart)
-    .post(CartController.apiPostCart);
+    .get(CartController.apiGetCart)
+    .post(CartController.apiPostCart)
+    .put(CartController.apiUpdateCart)
+    .delete(CartController.apiDeleteCart);
 
 export default router;
