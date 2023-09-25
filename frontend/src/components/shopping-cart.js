@@ -57,24 +57,24 @@ const ShoppingCart = props => {
       {items.length > 0 ? (
         <div>
           <div className="row fw-semibold">
-            <div className="col-sm-8">Product</div>
+            <div className="col-sm-8 col-9">Product</div>
             <div className="col-sm-2 d-sm-block d-none">Quantity</div>
-            <div className="col-sm-2 d-sm-block d-none">Price</div>
+            <div className="col-sm-2 text-center col-2">Price</div>
           </div>
           {items.map((item) => (
             <div className="row" key={item.item_id}>
               <hr id="hr_custom" />
-              <div className="col-8">
+              <div className="col-sm-8 col-7">
                 <div>{item.name}</div>
                 <div>{item.item_id}</div>
                 <div>{item.price}</div>
               </div>
-              <div className="col-2 align-self-center">
+              <div className="col-sm-2 col-2 align-self-center">
                 <select value={item.quantity} onChange={(e) => onChangeQuantity(e, item.item_id)}>
                   {quantityOptions}
                 </select>
               </div>
-              <div className="col-2 align-self-end fw-semibold">{parseFloat(item.price * item.quantity).toFixed(2)}</div>
+              <div className="col-sm-2 col-1 align-self-end fw-semibold">{parseFloat(item.price * item.quantity).toFixed(2)}</div>
             </div>
           ))}
           <hr />
