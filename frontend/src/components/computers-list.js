@@ -165,8 +165,8 @@ const ComputersList = props => {
             <div className="col-xl-4 col-md-6 pb-2">
               <Link to={"/computers/" + computer._id} className="card custom-card">
                 <div className="card-body">
-                  <h5 className="card-title">{computer.name || <Skeleton />}</h5>
-                  <p className="card-text">
+                  <h5 className="card-title" id="product_card">{computer.name || <Skeleton />}</h5>
+                  <p className="card-text" id="product_card">
                     <strong>CPU: </strong>{computer.cpu}<br />
                     <strong>RAM: </strong>{computer.ram}<br />
                     <strong>GPU: </strong>{computer.gpu}<br />
