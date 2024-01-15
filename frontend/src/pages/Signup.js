@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
 import ComputerDataService from '../services/computer';

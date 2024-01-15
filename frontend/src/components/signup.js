@@ -3,11 +3,11 @@ import ComputerDataService from "../services/computer";
 
 const SignUp = props => {
 
-  const initialUserState = {
+  /*const initialUserState = {
     name: "",
     id: "",
   };
-
+*/
   //const [user, setUser] = useState(initialUserState);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
