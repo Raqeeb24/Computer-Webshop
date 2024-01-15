@@ -13,6 +13,29 @@ class ComputerDataService {
     return http.get(`/computers?${by}=${query}&page=${page}`);
   }
 
+  signin(email, password) {
+    return http.post("/computers/signup", {
+      email: email,
+      password: password
+    });
+  }
+
+  secondSignup(data) {
+    return http.post("/secured/signup", data, {
+      withCredentials: true
+    });
+  }
+  secondLogin(data) {
+    return http.post("/secured/login", data, {
+      withCredentials: true
+    });
+  }
+  secondHome() {
+    return http.post("/secured/", {}, {
+      withCredentials: true
+    });
+  }
+
   createReview(data) {
     //return axios.post(`${baseURL}/computers/review-new`, data);
     return http.post("/computers/review", data);
@@ -39,15 +62,15 @@ class ComputerDataService {
     return http.get('/computers/cart', {
       withCredentials: true
     })
-    .then(response => {
-      console.log(`idk: ${response.data}`)
-      return response.data;
-    })
-    .catch(error => {
-      // Handle any errors here
-      console.log(error);
-      throw error; // Rethrow the error to be caught by the caller
-    });
+      .then(response => {
+        console.log(`idk: ${response.data}`)
+        return response.data;
+      })
+      .catch(error => {
+        // Handle any errors here
+        console.log(error);
+        throw error; // Rethrow the error to be caught by the caller
+      });
   }
 
   addToCart(data) {
@@ -62,7 +85,7 @@ class ComputerDataService {
     });
   }
 
-  deleteCart(){
+  deleteCart() {
     return http.delete('/computers/cart', {
       withCredentials: true
     });

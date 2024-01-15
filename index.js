@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 import ComputersDAO from'./backend/dao/computersDAO.js'; 
 import ReviewsDAO from './backend/dao/reviewsDAO.js';
 import CartDAO from './backend/dao/cartDAO.js';
+import UsersDAO from './backend/dao/usersDAO.js';
+import AuthenticationDAO from './backend/dao/authenticationDAO.js';
+import AuthMiddleware from './backend/middleware/AuthMiddleware.js';
 
 dotenv.config();
 const MongoClient = mongodb.MongoClient;
@@ -27,6 +30,8 @@ MongoClient.connect(
         await ComputersDAO.injectDB(client)
         await ReviewsDAO.injectDB(client)
         await CartDAO.injectDB(client)
+        await UsersDAO.injectDB(client)
+        await AuthenticationDAO.injectDB(client)
         app.listen(port, () => {
             console.log(`listening on port ${port}`)
         })

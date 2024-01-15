@@ -1,11 +1,17 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import computers from './backend/api/computers.route.js'
+import computers from './backend/api/computers.route.js';
+import authenticated from './backend/api/auth.route.js';
 import session from 'express-session';
 import connectMongoDBSession from 'connect-mongodb-session';
 
+//
+import bcrypt from 'bcrypt';
+import User from './backend/dao/usersDAO.js';
+
 import path from 'path';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 const app = express();
@@ -43,6 +49,7 @@ app.use(session({
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, 'frontend/build')));
@@ -64,6 +71,7 @@ app.get('/api/test', (req, res) => {
 
 
 app.use("/api/computers", computers);
+app.use("/api/secured", authenticated);
 
 app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')));
 

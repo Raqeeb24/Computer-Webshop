@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
 import { Switch, Route, Link } from 'react-router-dom';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 import Computer from './components/computers';
 import AddReview from './components/add-review';
@@ -13,9 +14,26 @@ import ComputersList from './components/computers-list';
 import AddComputer from './components/add-computer';
 import ShoppingCart from './components/shopping-cart';
 import Test from './components/test';
+import { Badge } from '@mui/material';
+
+import ComputerDataServices from '../src/services/computer';
+import SignUp from './components/signup';
+import SecondLogin from './pages/Login';
+import SecondSignup from './pages/Signup';
+import SecondHome from './pages/Home';
 
 function App() {
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = useState(null);
+  const [itemCount, setItemCount] = useState();
+
+  useEffect(() => {
+    ComputerDataServices.getCart()
+      .then(cart => {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        console.log(`cart length: ${totalItems}`);
+        setItemCount(totalItems);
+      })
+  }, [])
 
   async function login(user = null) {
     setUser(user);
@@ -38,18 +56,23 @@ function App() {
                   Logout {user.name}
                 </a>
               ) : (
-                <Link to={"/login"} className="nav-link">
+                <Link to={"/loginn"} className="nav-link">
                   Login
                 </Link>
               )}
               <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
             </Nav>
             <Nav className='ml-auto'>
-              <Link to={'/shoppingCart'} className="nav-link">Shopping Cart</Link>
+              <Link to={'/shoppingCart'} className="nav-link">
+                <Badge badgeContent={itemCount}>
+                  <ShoppingCartIcon />
+                </Badge>
+              </Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
 
 
       <div className="container mt-3">
@@ -74,6 +97,30 @@ function App() {
             )}
           />
           <Route
+            path="/signup"
+            render={(props) => (
+              <SignUp {...props} login={login} />
+            )}
+          />
+          <Route
+            path="/loginn"
+            render={(props) => (
+              <SecondLogin {...props} />
+            )}
+          />
+          <Route
+            path="/signupp"
+            render={(props) => (
+              <SecondSignup {...props} />
+            )}
+          />
+          <Route
+            path="/home"
+            render={(props) => (
+              <SecondHome {...props} />
+            )}
+          />
+          <Route
             path="/addComputer"
             render={(props) => (
               <AddComputer {...props} login={login} />
@@ -93,10 +140,7 @@ function App() {
           />
         </Switch>
       </div>
-
     </div>
-
-
   );
 }
 
