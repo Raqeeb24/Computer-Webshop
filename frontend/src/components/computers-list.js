@@ -95,10 +95,15 @@ const ComputersList = props => {
 
       console.log(`Successfully added ${computer.name} to cart`);
       console.log('Updated Cart:', updatedCart);
+      updateCart();
     } catch (error) {
       console.error('Error adding item to cart:', error);
     }
   };
+
+  const updateCart = () => {
+    props.updateCart();
+  }
 
   return (
     <div>

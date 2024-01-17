@@ -1,56 +1,96 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
+import ComputerDataService from "../services/computer";
+
 
 const Login = props => {
 
-  const initialUserState = {
-    name: "",
-    id: "",
+  const [inputValue, setInputValue] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = inputValue;
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
   };
 
-  const [user, setUser] = useState(initialUserState);
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "bottom-left",
+    });
+  const handleSuccess = (msg) =>
+    toast.success(msg, {
+      position: "bottom-left",
+    });
 
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setUser({ ...user, [name]: value });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await ComputerDataService.secondLogin(inputValue)
+      console.log(data);
+      const { success, message } = data;
+      if (success) {
+        handleSuccess(message);
+        login();
+      } else {
+        handleError(message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setInputValue({
+      ...inputValue,
+      email: "",
+      password: "",
+    });
   };
 
   const login = () => {
-    props.login(user)
-    props.history.push('/');
+    props.login();
+    props.history.push('/home');
   }
 
   return (
-    < div className="submit-form" >
-      <div>
+    <div className="submit-form">
+      <h2>Login Account</h2>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="user">Username</label>
+          <label htmlFor="email">Email</label>
           <input
-            type="text"
+            type="email"
+            name="email"
             className="form-control"
-            id="name"
-            required
-            value={user.name}
-            onChange={handleInputChange}
-            name="name"
+            value={email}
+            placeholder="Enter your email"
+            onChange={handleOnChange}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="id">ID</label>
+          <label htmlFor="password">Password</label>
           <input
-            type="text"
+            type="password"
+            name="password"
             className="form-control"
-            id="id"
-            required
-            value={user.id}
-            onChange={handleInputChange}
-            name="id"
+            value={password}
+            placeholder="Enter your password"
+            onChange={handleOnChange}
           />
         </div>
-        <button onClick={login} className="btn btn-success">
-          Login
-        </button>
-      </div>
-    </div >
+        <div className="form-group">
+          <button type="submit" className="btn btn-success">Submit</button>
+        </div>
+        <div className="form-group">
+          You don't have an account? <Link to={"/signupp"}>Signup</Link>
+        </div>
+      </form>
+      <ToastContainer />
+    </div>
   );
 };
 

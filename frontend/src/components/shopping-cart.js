@@ -38,17 +38,27 @@ const ShoppingCart = props => {
       console.error('Error adding item to cart:', error);
     }
     retrieveItems();
+    updateCart();
   }
 
   const retrieveItems = () => {
     ComputerDataService.getCart()
       .then(cart => {
+        console.log("type: ",typeof(cart));
         console.log(`cart: ${cart}`);
         setItems(cart);
       })
       .catch(e => {
         console.log(e);
       });
+  }
+
+  const updateCart = () => {
+    props.updateCart();
+  }
+
+  const navigateToComputer = (item_id) => {
+    props.history.push(`/computers/${item_id}`);
   }
 
   return (
@@ -65,8 +75,7 @@ const ShoppingCart = props => {
             <div className="row" key={item.item_id}>
               <hr id="hr_custom" />
               <div className="col-sm-8 col-7">
-                <div>{item.name}</div>
-                <div>{item.item_id}</div>
+                <div onClick={() => navigateToComputer(item.item_id)}>{item.name}</div>
                 <div>{item.price}</div>
               </div>
               <div className="col-sm-2 col-2 align-self-center">

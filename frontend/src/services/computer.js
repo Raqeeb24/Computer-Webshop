@@ -30,6 +30,11 @@ class ComputerDataService {
       withCredentials: true
     });
   }
+  logout() {
+    return http.post("/secured/logout", {}, {
+      withCredentials: true
+    });
+  }
   secondHome() {
     return http.post("/secured/", {}, {
       withCredentials: true

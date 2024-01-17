@@ -1,11 +1,12 @@
 import AuthenticationDAO from "../dao/authenticationDAO.js";
+import CartDAO from "../dao/cartDAO.js";
 import createSecretToken from "../util/SecretToken.js";
 import bcrypt from 'bcrypt';
 
 export default class AuthController {
     static async apiPostSignup(req, res, next) {
         try {
-            const { email, password, username, createdAt } = req.body;
+            const { email, password, username } = req.body;
             const existingUser = await AuthenticationDAO.findUser(email);
             if (existingUser) {
                 return res.json({ message: "User already exists" });
@@ -15,10 +16,18 @@ export default class AuthController {
                 email,
                 password: hashedPassword,
                 username,
-                createdAt,
+                createdAt: new Date(),
             };
             await AuthenticationDAO.addUser(user);
             const token = createSecretToken(user._id);
+            req.session.user_id = user._id;
+            const cart = req.session.cart
+            if(cart){
+                cart.forEach(async (item) => {
+                    item.user_id = user._id;
+                    await CartDAO.addToCart(item, user._id);
+                });
+            }
             res.cookie("token", token, {
                 withCredentials: true,
                 httpOnly: false,
@@ -55,6 +64,14 @@ export default class AuthController {
                 return res.json({ message: 'Incorrect password or email' })
             }
             const token = createSecretToken(user._id);
+            req.session.user_id = user._id;
+            const cart = req.session.cart
+            if(cart){
+                cart.forEach(async (item) => {
+                    item.user_id = user._id;
+                    await CartDAO.addToCart(item, user._id);
+                });
+            }
             res.cookie("token", token, {
                 withCredentials: true,
                 httpOnly: false,
@@ -63,6 +80,22 @@ export default class AuthController {
             next();
         } catch (error) {
             console.error(error);
+        }
+    }
+
+    static async apiPostLogout(req, res) {
+        try {
+            req.session.destroy((err) => {
+                if (err) {
+                    console.error('Failed to destroy session:', err);
+                    res.status(500).json({ error: 'Internal server error' });
+                } else {
+                    res.json({ message: 'Session destroyed' });
+                }
+            });
+        } catch (error) {
+            console.error('Error during session destruction:', error);
+            res.status(500).json({ error: 'Internal server error' });
         }
     }
 }

@@ -16,7 +16,7 @@ export default class AuthMiddleware {
         return res.json({ status: false })
       } else {
         const user = await AuthenticationDAO.verifyUser(data.id);
-        console.log("user: ", user);
+        console.log("user: ", data);
         if (user) {
           return res.json({ status: true, user: user.username })
         } else {
@@ -25,4 +25,23 @@ export default class AuthMiddleware {
       }
     })
   }
+
+  static async apiUserVerification(token) {
+    if (!token) {
+      return { status: false };
+    }
+    try {
+      const data = jwt.verify(token, process.env.TOKEN_KEY);
+      const user = await AuthenticationDAO.verifyUser(data.id);
+  
+      if (user) {
+        return { status: true, user: data };
+      } else {
+        return { status: false };
+      }
+    } catch (err) {
+      return { status: false };
+    }
+  }
+  
 }

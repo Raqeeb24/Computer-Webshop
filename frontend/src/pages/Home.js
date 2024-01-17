@@ -12,7 +12,7 @@ const Home = () => {
   useEffect(() => {
     const verifyCookie = async () => {
       if (!cookies.token) {
-        navigate.push("/loginn");
+        navigate.push("/login");
       }
       const { data } = await ComputerDataService.secondHome();
 
@@ -22,13 +22,13 @@ const Home = () => {
         ? toast(`Hello ${user}`, {
             position: "top-right",
           })
-        : (removeCookie("token"), navigate.push("/loginn"));
+        : (removeCookie("token"), navigate.push("/login"));
     };
     verifyCookie();
   }, [cookies, navigate, removeCookie]);
   const Logout = () => {
     removeCookie("token");
-    navigate.push("/loginn");
+    navigate.push("/login");
   };
   return (
     <>

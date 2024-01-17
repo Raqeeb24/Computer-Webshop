@@ -6,10 +6,6 @@ import authenticated from './backend/api/auth.route.js';
 import session from 'express-session';
 import connectMongoDBSession from 'connect-mongodb-session';
 
-//
-import bcrypt from 'bcrypt';
-import User from './backend/dao/usersDAO.js';
-
 import path from 'path';
 import cookieParser from 'cookie-parser';
 

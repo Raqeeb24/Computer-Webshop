@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import ComputerDataService from "../services/computer";
 
 
-const Login = () => {
-  const navigate = useHistory();
+const Login = props => {
+  //const navigate = useHistory();
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
@@ -32,15 +32,15 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      
       const { data } = await ComputerDataService.secondLogin(inputValue)
       console.log(data);
       const { success, message } = data;
       if (success) {
         handleSuccess(message);
-        setTimeout(() => {
-          navigate.push("/Home");
-        }, 1000);
+        props.login("Username");
+        props.history.push("/Home");
+
+        
       } else {
         handleError(message);
       }

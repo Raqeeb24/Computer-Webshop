@@ -5,7 +5,10 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
 import { Switch, Route, Link } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { Badge } from '@mui/material';
+
 
 import Computer from './components/computers';
 import AddReview from './components/add-review';
@@ -14,7 +17,6 @@ import ComputersList from './components/computers-list';
 import AddComputer from './components/add-computer';
 import ShoppingCart from './components/shopping-cart';
 import Test from './components/test';
-import { Badge } from '@mui/material';
 
 import ComputerDataServices from '../src/services/computer';
 import SignUp from './components/signup';
@@ -23,24 +25,54 @@ import SecondSignup from './pages/Signup';
 import SecondHome from './pages/Home';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
   const [itemCount, setItemCount] = useState();
+  const [cookies, removeCookie] = useCookies([]);
+
+  const {itemUpdater, setItemUpdater} = useState();
 
   useEffect(() => {
-    ComputerDataServices.getCart()
-      .then(cart => {
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        console.log(`cart length: ${totalItems}`);
-        setItemCount(totalItems);
-      })
-  }, [])
+    const countIitems = async () => {
+      await ComputerDataServices.getCart()
+        .then(cart => {
+          const totalItems = cart.reduce((sum, item) =>sum * item.quantity, 0);
+          console.log("total", totalItems);
+          setItemCount(totalItems);
+          console.log("after,", itemCount);
+        });
+    }
+    countIitems();
+  }, [itemCount]);
+  useEffect(() => {
+    const verifyCookie = async () => {
+      if (cookies.token) {
+        const { data } = await ComputerDataServices.secondHome();
+        const { status, user } = data;
+        if (status) {
+          setUser(user);
+        }
+      } else {
+        setUser(null);
+      };
+    }
+    verifyCookie();
+  }, [user, cookies, removeCookie]);
 
   async function login(user = null) {
     setUser(user);
   }
 
   async function logout() {
-    setUser(null)
+    setUser(null);
+    removeCookie("token");
+    ComputerDataServices.logout();
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  }
+
+  async function updateCart(item = null) {
+    setItemCount(item);
   }
   return (
     <div>
@@ -52,11 +84,11 @@ function App() {
             <Nav className="me-auto">
               <Link to={'/computers'} className='nav-link'>Computers</Link>
               {user ? (
-                <a href={logout} className="nav-link" style={{ cursor: 'pointer' }}>
-                  Logout {user.name}
-                </a>
+                <Link onClick={logout} className="nav-link">
+                  Logout {user}
+                </Link>
               ) : (
-                <Link to={"/loginn"} className="nav-link">
+                <Link to={"/login"} className="nav-link">
                   Login
                 </Link>
               )}
@@ -77,7 +109,11 @@ function App() {
 
       <div className="container mt-3">
         <Switch>
-          <Route exact path={["/", "/computers"]} component={ComputersList} />
+          <Route exact path={["/", "/computers"]}
+            component={(props) => (
+              <ComputersList {...props} updateCart={updateCart} />
+            )}
+          />
           <Route
             path="/computers/:id/review"
             render={(props) => (
@@ -105,13 +141,13 @@ function App() {
           <Route
             path="/loginn"
             render={(props) => (
-              <SecondLogin {...props} />
+              <SecondLogin {...props} handleSubmit={login} />
             )}
           />
           <Route
             path="/signupp"
             render={(props) => (
-              <SecondSignup {...props} />
+              <SecondSignup {...props} login={login} />
             )}
           />
           <Route
@@ -129,7 +165,7 @@ function App() {
           <Route
             path="/shoppingCart"
             render={(props) => (
-              <ShoppingCart {...props} />
+              <ShoppingCart {...props} updateCart={updateCart} />
             )}
           />
           <Route
