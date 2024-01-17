@@ -29,8 +29,6 @@ function App() {
   const [itemCount, setItemCount] = useState();
   const [cookies, removeCookie] = useCookies([]);
 
-  const {itemUpdater, setItemUpdater} = useState();
-
   useEffect(() => {
     const countIitems = async () => {
       await ComputerDataServices.getCart()
