@@ -45,7 +45,6 @@ export default class ComputersController {
   static async apiGetComputerByCpu(req, res, next) {
     try {
       let cpu = await ComputersDAO.getComputerByCpu()
-      console.log(`output cpu: ${cpu}`)
       res.json(cpu)
     } catch (e) {
       console.log(`api, ${e}`)
@@ -55,7 +54,6 @@ export default class ComputersController {
 
   static async apiPostComputer(req, res, next) {
     try {
-      console.log(req.body.name + req.body.cpu);
       const computerInfo = {
         name: req.body.name,
         cpu: req.body.cpu,

@@ -6,7 +6,7 @@ import ComputerDataService from "../services/computer";
 
 
 const Login = props => {
-
+  //const navigate = useHistory();
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
@@ -37,7 +37,10 @@ const Login = props => {
       const { success, message } = data;
       if (success) {
         handleSuccess(message);
-        login();
+        props.login("Username");
+        props.history.push("/Home");
+
+        
       } else {
         handleError(message);
       }
@@ -51,43 +54,34 @@ const Login = props => {
     });
   };
 
-  const login = () => {
-    props.login();
-    props.history.push('/home');
-  }
-
   return (
-    <div className="submit-form">
+    <div className="form_container">
       <h2>Login Account</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div>
           <label htmlFor="email">Email</label>
           <input
             type="email"
             name="email"
-            className="form-control"
             value={email}
             placeholder="Enter your email"
             onChange={handleOnChange}
           />
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="password">Password</label>
           <input
             type="password"
             name="password"
-            className="form-control"
             value={password}
             placeholder="Enter your password"
             onChange={handleOnChange}
           />
         </div>
-        <div className="form-group">
-          <button type="submit" className="btn btn-success">Submit</button>
-        </div>
-        <div className="form-group">
+        <button type="submit">Submit</button>
+        <span>
           You don't have an account? <Link to={"/signupp"}>Signup</Link>
-        </div>
+        </span>
       </form>
       <ToastContainer />
     </div>

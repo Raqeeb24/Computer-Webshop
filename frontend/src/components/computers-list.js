@@ -3,15 +3,20 @@ import ComputerDataService from "../services/computer";
 import { Link } from "react-router-dom";
 import "./computers-list.css";
 
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 const ComputersList = props => {
+  const [loading, setLoading] = useState(true);
   const [computers, setComputers] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [searchCpu, setSearchCpu] = useState("");
-  const [cpus, setCpu] = useState(["All Cpu"]);
+  const [cpus, setCpu] = useState(["Search by CPU"]);
 
   useEffect(() => {
-    retrieveComputers();
+    setLoading(true);
     retrieveCpu();
+    retrieveComputers();
   }, []);
 
   const onChangeSearchName = e => {
@@ -30,7 +35,7 @@ const ComputersList = props => {
       .then(response => {
         console.log(response.data);
         setComputers(response.data.computers);
-
+        setLoading(false);
       })
       .catch(e => {
         console.log(e);
@@ -72,11 +77,33 @@ const ComputersList = props => {
     if (searchCpu === "Search by CPU") {
       refreshList();
     } else {
-      console.log("cpu...")
-      console.log(searchCpu)
       find(searchCpu, "cpu")
     }
   };
+
+  const handleAddToCart = async (computer) => {
+    try {
+      const data = {
+        item_id: computer._id,
+        name: computer.name,
+        price: computer.price,
+        quantity: 1
+      };
+
+      const response = await ComputerDataService.addToCart(data);
+      const updatedCart = response.data;
+
+      console.log(`Successfully added ${computer.name} to cart`);
+      console.log('Updated Cart:', updatedCart);
+      updateCart();
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
+  };
+
+  const updateCart = () => {
+    props.updateCart();
+  }
 
   return (
     <div>
@@ -120,31 +147,50 @@ const ComputersList = props => {
         </div>
       </div>
       <div className="row">
-        {computers.map((computer) => {
-          const components = `${computer.cpu} ${computer.mainboard}, ${computer.ram}`;
-          return (
-            <div className="col-lg-4 pb-1">
+        {loading ? (
+          Array.from({ length: 9 }).map((index) => (
+            <div className="col-xl-4 col-md-6 pb-2" key={index}>
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">
+                    <Skeleton width={200} />
+                  </h5>
+                  <p className="card-text">
+                    <Skeleton count={3} />
+                    <Skeleton width={100} />
+                  </p>
+                  <div className="row justify-content-center">
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          computers.map((computer) => (
+            <div className="col-xl-4 col-md-6 pb-2">
               <Link to={"/computers/" + computer._id} className="card custom-card">
                 <div className="card-body">
-                  <h5 className="card-title">{computer.name}</h5>
-                  <p className="card-text">
+                  <h5 className="card-title" id="product_card">{computer.name || <Skeleton />}</h5>
+                  <p className="card-text" id="product_card">
                     <strong>CPU: </strong>{computer.cpu}<br />
                     <strong>RAM: </strong>{computer.ram}<br />
                     <strong>GPU: </strong>{computer.gpu}<br />
                     <strong>Price: </strong>{computer.price}
                   </p>
-                  <div className="row justify-content-center">
-                    <Link to={"#"} className="btn btn-primary col-lg-5 mx-1 mb-1 add-to-cart-button">
+                  <div className="text-end">
+                    <button onClick={(event) => {
+                      event.preventDefault();
+                      handleAddToCart(computer);
+                    }}
+                      className="card-link btn btn-primary btn-sm col-md-4 mx-1 mb-1 add-to-cart-button">
                       Add to cart
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </Link>
             </div>
-          );
-        })}
-
-
+          ))
+        )}
       </div>
     </div>
   );

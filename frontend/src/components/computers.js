@@ -135,9 +135,7 @@ const Computer = props => {
                 <p>No reviews yet.</p>
               </div>
             )}
-
           </div>
-
         </div>
       ) : (
         <div>

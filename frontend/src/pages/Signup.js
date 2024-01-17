@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-import ComputerDataService from "../services/computer";
+import ComputerDataService from '../services/computer';
 
-
-const Login = props => {
-
+const Signup = () => {
+  const navigate = useHistory();
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
+    username: "",
   });
-  const { email, password } = inputValue;
+  const { email, password, username } = inputValue;
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setInputValue({
@@ -26,18 +26,19 @@ const Login = props => {
     });
   const handleSuccess = (msg) =>
     toast.success(msg, {
-      position: "bottom-left",
+      position: "bottom-right",
     });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await ComputerDataService.secondLogin(inputValue)
-      console.log(data);
+      const { data } = await ComputerDataService.secondSignup(inputValue);
       const { success, message } = data;
       if (success) {
         handleSuccess(message);
-        login();
+        setTimeout(() => {
+          navigate.push("/home");
+        }, 1000);
       } else {
         handleError(message);
       }
@@ -48,50 +49,52 @@ const Login = props => {
       ...inputValue,
       email: "",
       password: "",
+      username: "",
     });
   };
 
-  const login = () => {
-    props.login();
-    props.history.push('/home');
-  }
-
   return (
-    <div className="submit-form">
-      <h2>Login Account</h2>
+    <div className="form_container">
+      <h2>Signup Account</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div>
           <label htmlFor="email">Email</label>
           <input
             type="email"
             name="email"
-            className="form-control"
             value={email}
             placeholder="Enter your email"
             onChange={handleOnChange}
           />
         </div>
-        <div className="form-group">
+        <div>
+          <label htmlFor="email">Username</label>
+          <input
+            type="text"
+            name="username"
+            value={username}
+            placeholder="Enter your username"
+            onChange={handleOnChange}
+          />
+        </div>
+        <div>
           <label htmlFor="password">Password</label>
           <input
             type="password"
             name="password"
-            className="form-control"
             value={password}
             placeholder="Enter your password"
             onChange={handleOnChange}
           />
         </div>
-        <div className="form-group">
-          <button type="submit" className="btn btn-success">Submit</button>
-        </div>
-        <div className="form-group">
-          You don't have an account? <Link to={"/signupp"}>Signup</Link>
-        </div>
+        <button type="submit">Submit</button>
+        <span>
+          Already have an account? <Link to={"/loginn"}>Login</Link>
+        </span>
       </form>
       <ToastContainer />
     </div>
   );
 };
 
-export default Login;
+export default Signup;
