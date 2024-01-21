@@ -13,19 +13,12 @@ class ComputerDataService {
     return http.get(`/computers?${by}=${query}&page=${page}`);
   }
 
-  signin(email, password) {
-    return http.post("/computers/signup", {
-      email: email,
-      password: password
-    });
-  }
-
-  secondSignup(data) {
+  signup(data) {
     return http.post("/secured/signup", data, {
       withCredentials: true
     });
   }
-  secondLogin(data) {
+  login(data) {
     return http.post("/secured/login", data, {
       withCredentials: true
     });

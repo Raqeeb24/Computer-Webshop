@@ -104,7 +104,6 @@ export default class ComputersDAO {
       cpu = await computers.distinct("cpu")
       return cpu
     } catch (e) {
-      console.log("unable to get cpu")
       console.error(`Unable to get cpu ${e}`)
       return cpu
     }

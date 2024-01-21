@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
-import ComputerDataService from "../services/computer";
+import { ToastContainer, toast } from "react-toastify";
 
+import ComputerDataService from "../services/computer";
 
 function AddComputer() {
 
@@ -19,100 +20,107 @@ function AddComputer() {
     });
 
     const changeHandler = e => {
-        setComputerInfo({...computerInfo, [e.target.name]: e.target.value})
+        setComputerInfo({ ...computerInfo, [e.target.name]: e.target.value })
     };
 
-    const saveComptuer = (e) => {
+    const saveComptuer = async (e) => {
         e.preventDefault();
-        
-        ComputerDataService.createComputer(computerInfo)
-        .then(response => {
-            window.alert(`successfully added ${computerInfo.name} to ComputerList`);
-            console.log(response.computerInfo);
-          })
-          .catch(e => {
-            window.alert(`failed to add ${computerInfo.name}`);
-            console.log(e);
-          });
+        try {
+            const { data } = await ComputerDataService.createComputer(computerInfo);
+            const { success, message } = data;
+            if (success) {
+                handleSuccess(message);
+            } else {
+                handleError(message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
+    const handleError = (err) =>
+        toast.error(err, {
+            position: "bottom-left",
+        });
+    const handleSuccess = (msg) =>
+        toast.success(msg, {
+            position: "bottom-right",
+        });
+
     return (
         <div className="App">
-            <head>
-                <title>AddComputer</title>
-            </head>
             <h1>Add a computer</h1>
             <form>
-                <label for="input">Name</label>
+                <label htmlFor="input">Name</label>
                 <input type="text"
-                    class="form-control"
+                    className="form-control"
                     name="name"
                     onChange={changeHandler}
                     placeholder="name" />
-                <div class="row">
-                    <div class="col">
-                        <label for="input">CPU</label>
+                <div className="row">
+                    <div className="col">
+                        <label htmlFor="input">CPU</label>
                         <input type="text"
-                            class="form-control"
+                            className="form-control"
                             name="cpu"
                             onChange={changeHandler}
                             placeholder="cpu" />
                     </div>
-                    <div class="col">
-                        <label for="input">CPU-cooler</label>
+                    <div className="col">
+                        <label htmlFor="input">CPU-cooler</label>
                         <input type="text"
-                            class="form-control"
+                            className="form-control"
                             name="cpu_cooler"
                             onChange={changeHandler}
                             placeholder="cpu-cooler" />
                     </div>
                 </div>
-                <label for="input">Mainboard</label>
+                <label htmlFor="input">Mainboard</label>
                 <input type="text"
-                    class="form-control"
+                    className="form-control"
                     name="mainboard"
                     onChange={changeHandler}
                     placeholder="mainboard" />
-                <label for="input">RAM</label>
+                <label htmlFor="input">RAM</label>
                 <input type="text"
-                    class="form-control"
+                    className="form-control"
                     name="ram"
                     onChange={changeHandler}
                     placeholder="ram" />
-                <label for="input">GPU</label>
+                <label htmlFor="input">GPU</label>
                 <input type="text"
-                    class="form-control"
+                    className="form-control"
                     name="gpu"
                     onChange={changeHandler}
                     placeholder="gpu" />
-                <label for="input">SSD</label>
+                <label htmlFor="input">SSD</label>
                 <input type="text"
-                    class="form-control"
+                    className="form-control"
                     name="ssd"
                     onChange={changeHandler}
                     placeholder="ssd" />
-                <label for="input">Case</label>
+                <label htmlFor="input">Case</label>
                 <input type="text"
-                    class="form-control"
+                    className="form-control"
                     name="case"
                     onChange={changeHandler}
                     placeholder="case" />
-                <label for="input">Power supply</label>
+                <label htmlFor="input">Power supply</label>
                 <input type="text"
-                    class="form-control"
+                    className="form-control"
                     name="power_supply"
                     onChange={changeHandler}
                     placeholder="power supply" />
-                <div class="col-2">
-                    <label for="input">Price</label>
+                <div className="col-2">
+                    <label htmlFor="input">Price</label>
                     <input type="text"
-                        class="form-control"
+                        className="form-control"
                         name="price"
                         onChange={changeHandler}
                         placeholder="price" /><br />
                 </div>
-
-                <button onClick={saveComptuer} type="submit" class="btn btn-primary">submit</button>
+                <button onClick={saveComptuer} type="submit" className="btn btn-primary">submit</button>
             </form>
+            <ToastContainer />
         </div>
     );
 }

@@ -7,14 +7,13 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const ComputersList = props => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [computers, setComputers] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [searchCpu, setSearchCpu] = useState("");
   const [cpus, setCpu] = useState(["Search by CPU"]);
 
   useEffect(() => {
-    setLoading(true);
     retrieveCpu();
     retrieveComputers();
   }, []);
@@ -31,26 +30,38 @@ const ComputersList = props => {
   };
 
   const retrieveComputers = () => {
-    ComputerDataService.getAll()
-      .then(response => {
-        console.log(response.data);
-        setComputers(response.data.computers);
-        setLoading(false);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    const items = JSON.parse(sessionStorage.getItem("computers"));
+    if (items) {
+      setComputers(items);
+    } else {
+      setLoading(true);
+      ComputerDataService.getAll()
+        .then(response => {
+          setComputers(response.data.computers);
+          sessionStorage.setItem("computers", JSON.stringify(response.data.computers));
+          setLoading(false);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
+
   };
 
   const retrieveCpu = () => {
-    ComputerDataService.getCpu()
+    const items = JSON.parse(sessionStorage.getItem("cpus"));
+    if(items) {
+      setCpu(["Search by CPU"].concat(items));
+    } else {
+      ComputerDataService.getCpu()
       .then(response => {
-        console.log(response.data);
+        sessionStorage.setItem("cpus", JSON.stringify(response.data));
         setCpu(["Search by CPU"].concat(response.data));
       })
       .catch(e => {
         console.log(e);
       });
+    }
   };
 
   const refreshList = () => {
@@ -60,7 +71,6 @@ const ComputersList = props => {
   const find = (query, by) => {
     ComputerDataService.find(query, by)
       .then(response => {
-        console.log(response.data);
         setComputers(response.data.computers);
       })
       .catch(e => {

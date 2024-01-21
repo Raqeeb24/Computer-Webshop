@@ -44,11 +44,11 @@ export default class ComputersController {
 
   static async apiGetComputerByCpu(req, res, next) {
     try {
-      let cpu = await ComputersDAO.getComputerByCpu()
-      res.json(cpu)
+      let cpu = await ComputersDAO.getComputerByCpu();
+      res.json(cpu);
     } catch (e) {
-      console.log(`api, ${e}`)
-      res.status(500).json({ error: e })
+      console.log(`api, ${e}`);
+      res.status(500).json({ error: e });
     }
   }
 
@@ -67,12 +67,10 @@ export default class ComputersController {
         price: req.body.price
       }
 
-      const ComputerResponse = await ComputersDAO.addComputer(
-        computerInfo
-      )
-      res.json({ status: "success" })
+      await ComputersDAO.addComputer(computerInfo);
+      res.status(201).json({ message: `Computer ${computerInfo.name} successfully added.`, success: true});
     } catch (e) {
-      res.status(500).json({ error: e.message })
+      res.status(500).json({ message: `Failed to add the computer. ${e.message}`, success: false });
     }
   }
 }

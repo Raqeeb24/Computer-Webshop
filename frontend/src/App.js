@@ -13,15 +13,14 @@ import { Badge } from '@mui/material';
 import Computer from './components/computers';
 import AddReview from './components/add-review';
 import Login from './components/login';
+import Signup from './components/signup';
 import ComputersList from './components/computers-list';
 import AddComputer from './components/add-computer';
 import ShoppingCart from './components/shopping-cart';
 import Test from './components/test';
 
 import ComputerDataServices from '../src/services/computer';
-import SignUp from './components/signup';
-import SecondLogin from './pages/Login';
-import SecondSignup from './pages/Signup';
+
 import SecondHome from './pages/Home';
 
 function App() {
@@ -30,6 +29,7 @@ function App() {
   const [cookies, removeCookie] = useCookies([]);
 
   useEffect(() => {
+    console.error("useffect countitems called")
     const countIitems = async () => {
       await ComputerDataServices.getCart()
         .then(cart => {
@@ -40,7 +40,7 @@ function App() {
         });
     }
     countIitems();
-  }, [itemCount]);
+  }, []);
   useEffect(() => {
     const verifyCookie = async () => {
       if (cookies.token) {
@@ -72,6 +72,7 @@ function App() {
   async function updateCart(item = null) {
     setItemCount(item);
   }
+
   return (
     <div>
       <Navbar expand="lg" bg="dark" variant="dark">
@@ -82,9 +83,9 @@ function App() {
             <Nav className="me-auto">
               <Link to={'/computers'} className='nav-link'>Computers</Link>
               {user ? (
-                <Link onClick={logout} className="nav-link">
+                <a onClick={logout} className="nav-link">
                   Logout {user}
-                </Link>
+                </a>
               ) : (
                 <Link to={"/login"} className="nav-link">
                   Login
@@ -102,8 +103,6 @@ function App() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
-
 
       <div className="container mt-3">
         <Switch>
@@ -133,19 +132,7 @@ function App() {
           <Route
             path="/signup"
             render={(props) => (
-              <SignUp {...props} login={login} />
-            )}
-          />
-          <Route
-            path="/loginn"
-            render={(props) => (
-              <SecondLogin {...props} handleSubmit={login} />
-            )}
-          />
-          <Route
-            path="/signupp"
-            render={(props) => (
-              <SecondSignup {...props} login={login} />
+              <Signup {...props} login={login} />
             )}
           />
           <Route

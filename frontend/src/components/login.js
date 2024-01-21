@@ -32,7 +32,7 @@ const Login = props => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await ComputerDataService.secondLogin(inputValue)
+      const { data } = await ComputerDataService.login(inputValue);
       console.log(data);
       const { success, message } = data;
       if (success) {
@@ -81,12 +81,10 @@ const Login = props => {
             placeholder="Enter your password"
             onChange={handleOnChange}
           />
-        </div>
+        </div><br />
+        <button type="submit" className="btn btn-success">Submit</button>
         <div className="form-group">
-          <button type="submit" className="btn btn-success">Submit</button>
-        </div>
-        <div className="form-group">
-          You don't have an account? <Link to={"/signupp"}>Signup</Link>
+          You don't have an account? <Link to={"/signup"}>Signup</Link>
         </div>
       </form>
       <ToastContainer />
