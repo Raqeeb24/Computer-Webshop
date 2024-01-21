@@ -40,7 +40,7 @@ function App() {
         });
     }
     countIitems();
-  }, []);
+  }, [itemCount]);
   useEffect(() => {
     const verifyCookie = async () => {
       if (cookies.token) {
@@ -83,9 +83,9 @@ function App() {
             <Nav className="me-auto">
               <Link to={'/computers'} className='nav-link'>Computers</Link>
               {user ? (
-                <a onClick={logout} className="nav-link">
+                <span onClick={logout} className="nav-link" style={{cursor: "pointer"}}>
                   Logout {user}
-                </a>
+                </span>
               ) : (
                 <Link to={"/login"} className="nav-link">
                   Login
