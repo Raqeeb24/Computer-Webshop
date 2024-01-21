@@ -61,6 +61,7 @@ class ComputerDataService {
       withCredentials: true
     })
       .then(response => {
+        console.log(`idk: ${response.data}`)
         return response.data;
       })
       .catch(error => {
