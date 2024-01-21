@@ -58,6 +58,9 @@ function App() {
 
   async function login(user = null) {
     setUser(user);
+    setTimeout(() => {
+      window.location.reload();
+    }, 250);
   }
 
   async function logout() {
@@ -66,7 +69,7 @@ function App() {
     ComputerDataServices.logout();
     setTimeout(() => {
       window.location.reload();
-    }, 500);
+    }, 250);
   }
 
   async function updateCart(item = null) {
