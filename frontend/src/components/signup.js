@@ -94,7 +94,7 @@ const Signup = props => {
         </div><br />
         <button type="submit" className="btn btn-success">Submit</button>
         <div className="form-group">
-          Already have an account? <Link to={"/loginn"}>Login</Link>
+          Already have an account? <Link to={"/login"}>Login</Link>
         </div>
       </form>
       <ToastContainer />
