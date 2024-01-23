@@ -58,9 +58,6 @@ function App() {
 
   async function login(user = null) {
     setUser(user);
-    setTimeout(() => {
-      window.location.reload();
-    }, 250);
   }
 
   async function logout() {
