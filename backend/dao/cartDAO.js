@@ -24,7 +24,7 @@ export default class CartDAO {
                     user_id: cartItem.user_id,
                     name: cartItem.name,
                     price: cartItem.price,
-                    quantity: cartItem.quantity
+                    quantity: parseInt(cartItem.quantity)
                 };
             });
 

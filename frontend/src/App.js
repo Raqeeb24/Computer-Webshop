@@ -8,7 +8,8 @@ import { Switch, Route, Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Badge } from '@mui/material';
-
+import { ToastContainer } from "react-toastify";
+import lscache from 'lscache';
 
 import Computer from './components/computers';
 import AddReview from './components/add-review';
@@ -30,43 +31,55 @@ function App() {
 
   useEffect(() => {
     console.error("useffect countitems called")
-    const countIitems = async () => {
-      await ComputerDataServices.getCart()
-        .then(cart => {
-          const totalItems = cart.reduce((sum, item) =>sum * item.quantity, 0);
-          console.log("total", totalItems);
-          setItemCount(totalItems);
-          console.log("after,", itemCount);
-        });
+    const countIitems = () => {
+      const lsCart = lscache.get("cart");
+      if (lsCart) {
+        const totalItems = lsCart.reduce((sum, item) => sum + item.quantity, 0);
+        setItemCount(totalItems);
+      } else {
+        ComputerDataServices.getCart()
+          .then(cart => {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            setItemCount(totalItems);
+            lscache.set("cart", cart, 5);
+          })
+          .catch(e => {
+            console.log(e);
+          });
+      }
     }
     countIitems();
-  }, [itemCount]);
+  }, [user, itemCount]);
+
   useEffect(() => {
-    const verifyCookie = async () => {
-      if (cookies.token) {
-        const { data } = await ComputerDataServices.secondHome();
-        const { status, user } = data;
-        if (status) {
-          setUser(user);
+    const verifyUser = () => {
+      try {
+        const username = cookies.user;
+        if (username) {
+          console.log("username: ", username);
+          setUser(username);
         }
-      } else {
-        setUser(null);
-      };
+      } catch (error) {
+        console.error('Error verifying cookie:', error);
+      }
     }
-    verifyCookie();
-  }, [user, cookies, removeCookie]);
+    verifyUser();
+  }, [user, cookies.user]);
 
   async function login(user = null) {
+    lscache.remove("cart");
     setUser(user);
   }
 
   async function logout() {
+    lscache.set("cart", [], 5);
     setUser(null);
     removeCookie("token");
+
     ComputerDataServices.logout();
     setTimeout(() => {
       window.location.reload();
-    }, 250);
+    }, 100);
   }
 
   async function updateCart(item = null) {
@@ -74,94 +87,97 @@ function App() {
   }
 
   return (
-    <div>
-      <Navbar expand="lg" bg="dark" variant="dark">
-        <Container>
-          <Navbar.Brand>Computer Webshop</Navbar.Brand>
-          <Navbar.Toggle className='justify-content-end' aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-              <Link to={'/computers'} className='nav-link'>Computers</Link>
-              {user ? (
-                <span onClick={logout} className="nav-link" style={{cursor: "pointer"}}>
-                  Logout {user}
-                </span>
-              ) : (
-                <Link to={"/login"} className="nav-link">
-                  Login
+    <>
+      <div>
+        <Navbar expand="lg" bg="dark" variant="dark">
+          <Container>
+            <Navbar.Brand>Computer Webshop</Navbar.Brand>
+            <Navbar.Toggle className='justify-content-end' aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="me-auto">
+                <Link to={'/computers'} className='nav-link'>Computers</Link>
+                {user ? (
+                  <span onClick={logout} className="nav-link" style={{ cursor: "pointer" }}>
+                    Logout {user}
+                  </span>
+                ) : (
+                  <Link to={"/login"} className="nav-link">
+                    Login
+                  </Link>
+                )}
+                <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
+              </Nav>
+              <Nav className='ml-auto'>
+                <Link to={'/shoppingCart'} className="nav-link">
+                  <Badge badgeContent={itemCount}>
+                    <ShoppingCartIcon />
+                  </Badge>
                 </Link>
-              )}
-              <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
-            </Nav>
-            <Nav className='ml-auto'>
-              <Link to={'/shoppingCart'} className="nav-link">
-                <Badge badgeContent={itemCount}>
-                  <ShoppingCartIcon />
-                </Badge>
-              </Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
 
-      <div className="container mt-3">
-        <Switch>
-          <Route exact path={["/", "/computers"]}
-            component={(props) => (
-              <ComputersList {...props} updateCart={updateCart} />
-            )}
-          />
-          <Route
-            path="/computers/:id/review"
-            render={(props) => (
-              <AddReview {...props} user={user} />
-            )}
-          />
-          <Route
-            path="/computers/:id"
-            render={(props) => (
-              <Computer {...props} user={user} />
-            )}
-          />
-          <Route
-            path="/login"
-            render={(props) => (
-              <Login {...props} login={login} />
-            )}
-          />
-          <Route
-            path="/signup"
-            render={(props) => (
-              <Signup {...props} login={login} />
-            )}
-          />
-          <Route
-            path="/home"
-            render={(props) => (
-              <SecondHome {...props} />
-            )}
-          />
-          <Route
-            path="/addComputer"
-            render={(props) => (
-              <AddComputer {...props} login={login} />
-            )}
-          />
-          <Route
-            path="/shoppingCart"
-            render={(props) => (
-              <ShoppingCart {...props} updateCart={updateCart} />
-            )}
-          />
-          <Route
-            path="/test"
-            render={() => (
-              <Test />
-            )}
-          />
-        </Switch>
+        <div className="container mt-3">
+          <Switch>
+            <Route exact path={["/", "/computers"]}
+              component={(props) => (
+                <ComputersList {...props} updateCart={updateCart} />
+              )}
+            />
+            <Route
+              path="/computers/:id/review"
+              render={(props) => (
+                <AddReview {...props} user={user} />
+              )}
+            />
+            <Route
+              path="/computers/:id"
+              render={(props) => (
+                <Computer {...props} user={user} />
+              )}
+            />
+            <Route
+              path="/login"
+              render={(props) => (
+                <Login {...props} login={login} />
+              )}
+            />
+            <Route
+              path="/signup"
+              render={(props) => (
+                <Signup {...props} login={login} />
+              )}
+            />
+            <Route
+              path="/home"
+              render={(props) => (
+                <SecondHome {...props} />
+              )}
+            />
+            <Route
+              path="/addComputer"
+              render={(props) => (
+                <AddComputer {...props} login={login} />
+              )}
+            />
+            <Route
+              path="/shoppingCart"
+              render={(props) => (
+                <ShoppingCart {...props} updateCart={updateCart} />
+              )}
+            />
+            <Route
+              path="/test"
+              render={() => (
+                <Test />
+              )}
+            />
+          </Switch>
+        </div>
       </div>
-    </div>
+      <ToastContainer />
+    </>
   );
 }
 

@@ -48,7 +48,7 @@ class ComputerDataService {
     return http.delete(`/review-delete?id=${id}`, { data: { user_id: userId } });
   }
 
-  getCpu(id) {
+  getCpu() {
     return http.get(`/computers/cpu`);
   }
 
@@ -61,12 +61,12 @@ class ComputerDataService {
       withCredentials: true
     })
       .then(response => {
+        console.log("res cart: ", response.data);
         return response.data;
       })
       .catch(error => {
-        // Handle any errors here
         console.log(error);
-        throw error; // Rethrow the error to be caught by the caller
+        throw error;
       });
   }
 

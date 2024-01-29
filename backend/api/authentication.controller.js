@@ -1,5 +1,6 @@
 import AuthenticationDAO from "../dao/authenticationDAO.js";
 import CartDAO from "../dao/cartDAO.js";
+import CookiesMiddleware from "../middleware/CookiesMiddleware.js";
 import createSecretToken from "../util/SecretToken.js";
 import bcrypt from 'bcrypt';
 
@@ -28,10 +29,8 @@ export default class AuthController {
                     await CartDAO.addToCart(item, user._id);
                 });
             }
-            res.cookie("token", token, {
-                withCredentials: true,
-                httpOnly: false,
-            });
+            CookiesMiddleware.setCookie(res, "token", token);
+            CookiesMiddleware.setCookie(res, "user", user.username);
             res.status(201).json({
                 message: "User signed in successfully",
                 success: true,
@@ -72,11 +71,13 @@ export default class AuthController {
                     await CartDAO.addToCart(item, user._id);
                 });
             }
-            res.cookie("token", token, {
-                withCredentials: true,
-                httpOnly: false,
+            CookiesMiddleware.setCookie(res, "token", token);
+            CookiesMiddleware.setCookie(res, "user", user.username);
+            res.status(201).json({ 
+                message: "User logged in successfully", 
+                success: true,
+                username: user.username
             });
-            res.status(201).json({ message: "User logged in successfully", success: true });
             next();
         } catch (error) {
             console.error(error);
@@ -93,6 +94,8 @@ export default class AuthController {
                     res.json({ message: 'Session destroyed' });
                 }
             });
+            CookiesMiddleware.deleteCookie(res, "token");
+            CookiesMiddleware.deleteCookie(res, "user");
         } catch (error) {
             console.error('Error during session destruction:', error);
             res.status(500).json({ error: 'Internal server error' });

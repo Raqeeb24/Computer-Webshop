@@ -1,15 +1,15 @@
 import CartDAO from "../dao/cartDAO.js";
+import CookiesMiddleware from "../middleware/CookiesMiddleware.js";
 
 export default class CartController {
   static async apiGetCart(req, res, next) {
     try {
       const user_id = req.session.user_id;
-      console.log("userid: ", user_id);
+      //console.log("userid: ", user_id);
       if (user_id) {
         const { cart } = await CartDAO.getCart(user_id);
         res.json(cart);
       } else {
-        console.log(req.session.cart)
         res.json(req.session.cart || []);
       }
     } catch (error) {
@@ -54,7 +54,6 @@ export default class CartController {
         } else {
           req.session.cart.push(cartItem);
         }
-
         res.json(req.session.cart);
       }
     } catch (error) {
@@ -66,16 +65,17 @@ export default class CartController {
 
   static async apiUpdateCart(req, res) {
     try {
+      console
       const user_id = req.session.user_id
       const cartItem = {
         item_id: req.body.item_id,
-        quantity: req.body.quantity
+        quantity: parseInt(req.body.quantity)
       };
 
       if (user_id) {
-        if (cartItem.quantity == 0){
+        if (cartItem.quantity == 0) {
           await CartDAO.removeItem(cartItem.item_id, user_id);
-          res.json( {message: "user-item successfully deleted"});
+          res.json({ message: "user-item successfully deleted" });
         }
         await CartDAO.updateCart(cartItem, user_id);
         res.json({ message: "user-cart put success" });
@@ -89,11 +89,8 @@ export default class CartController {
         } else {
           req.session.cart.splice(existingCartItemIndex, 1);
         }
-
         res.json({ message: "put success" });
       }
-
-
     } catch (e) {
       console.log(`Unable to post post cart: ${e}}`);
     }
@@ -102,14 +99,14 @@ export default class CartController {
   static async apiDeleteCart(req, res) {
     try {
       const user_id = req.session.user_id;
-      if(user_id) {
+      if (user_id) {
         await CartDAO.clearCart(user_id);
-        res.json({ message: "deleted user-cart successfully"});
+        res.json({ message: "deleted user-cart successfully" });
       }
       delete req.session.cart;
       res.json({ message: "delete cart success" });
-  } catch (e) {
+    } catch (e) {
       console.log(`Unable to empty cart: ${e}}`);
-  }
+    }
   }
 }

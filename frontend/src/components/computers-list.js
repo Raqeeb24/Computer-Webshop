@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import ComputerDataService from "../services/computer";
 import { Link } from "react-router-dom";
+import lscache from "lscache";
 import "./computers-list.css";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const ComputersList = props => {
+  const lsComputers = lscache.get("computers");
   const [loading, setLoading] = useState(false);
-  const [computers, setComputers] = useState([]);
+  const [computers, setComputers] = useState(lsComputers?.data?.computers || []);
   const [searchName, setSearchName] = useState("");
   const [searchCpu, setSearchCpu] = useState("");
   const [cpus, setCpu] = useState(["Search by CPU"]);
@@ -16,6 +18,7 @@ const ComputersList = props => {
   useEffect(() => {
     retrieveCpu();
     retrieveComputers();
+    // eslint-disable-next-line
   }, []);
 
   const onChangeSearchName = e => {
@@ -26,41 +29,36 @@ const ComputersList = props => {
   const onChangeSearchCpu = e => {
     const searchCpu = e.target.value;
     setSearchCpu(searchCpu);
-
   };
 
   const retrieveComputers = () => {
-    const items = JSON.parse(sessionStorage.getItem("computers"));
-    if (items) {
-      setComputers(items);
-    } else {
+    if (!lsComputers) {
       setLoading(true);
       ComputerDataService.getAll()
         .then(response => {
           setComputers(response.data.computers);
-          sessionStorage.setItem("computers", JSON.stringify(response.data.computers));
+          lscache.set("computers", response, 10);
           setLoading(false);
         })
         .catch(e => {
           console.log(e);
         });
     }
-
   };
 
   const retrieveCpu = () => {
-    const items = JSON.parse(sessionStorage.getItem("cpus"));
-    if(items) {
-      setCpu(["Search by CPU"].concat(items));
+    const lsCpus = lscache.get("cpus");
+    if (lsCpus) {
+      setCpu(["Search by CPU"].concat(lsCpus.data));
     } else {
       ComputerDataService.getCpu()
-      .then(response => {
-        sessionStorage.setItem("cpus", JSON.stringify(response.data));
-        setCpu(["Search by CPU"].concat(response.data));
-      })
-      .catch(e => {
-        console.log(e);
-      });
+        .then(response => {
+          setCpu(["Search by CPU"].concat(response.data));
+          lscache.set("cpus", response, 10);
+        })
+        .catch(e => {
+          console.log(e);
+        });
     }
   };
 
@@ -101,6 +99,7 @@ const ComputersList = props => {
       };
 
       const response = await ComputerDataService.addToCart(data);
+      lscache.remove("cart");
       const updatedCart = response.data;
 
       console.log(`Successfully added ${computer.name} to cart`);

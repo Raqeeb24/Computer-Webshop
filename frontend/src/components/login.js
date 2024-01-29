@@ -34,10 +34,11 @@ const Login = props => {
     try {
       const { data } = await ComputerDataService.login(inputValue);
       console.log(data);
-      const { success, message } = data;
+      const { success, message, username} = data;
       if (success) {
         handleSuccess(message);
-        login();
+        props.login(username);
+        props.history.push('/home');
       } else {
         handleError(message);
       }
@@ -50,11 +51,6 @@ const Login = props => {
       password: "",
     });
   };
-
-  const login = () => {
-    props.login();
-    props.history.push('/home');
-  }
 
   return (
     <div className="submit-form">

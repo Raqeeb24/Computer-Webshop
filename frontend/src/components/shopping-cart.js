@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import lscache from "lscache";
 import ComputerDataService from "../services/computer";
 import "./shopping-cart.css";
 
@@ -29,11 +30,11 @@ const ShoppingCart = props => {
         item_id: item_id,
         quantity: quantity
       };
-
-      const response = await ComputerDataService.updateCart(data);
-      const updatedCart = response.data;
-
-      console.log('Updated Cart:', updatedCart);
+      await ComputerDataService.updateCart(data)
+        .then(() => {
+          updateCart();
+          lscache.remove("cart");
+        });
     } catch (error) {
       console.error('Error adding item to cart:', error);
     }
@@ -42,19 +43,33 @@ const ShoppingCart = props => {
   }
 
   const retrieveItems = () => {
-    ComputerDataService.getCart()
-      .then(cart => {
-        console.log("type: ",typeof(cart));
-        console.log(`cart: ${cart}`);
-        setItems(cart);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    const lsCart = lscache.get("cart");
+    if (lsCart) {
+      setItems(lsCart);
+    } else {
+      ComputerDataService.getCart()
+        .then(cart => {
+          setItems(cart);
+          lscache.set("cart", cart, 5);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
   }
 
   const updateCart = () => {
     props.updateCart();
+  }
+
+  const deleteCart = () => {
+    console.log("DELETE CART")
+    ComputerDataService.deleteCart()
+      .then(() => {
+        lscache.remove("cart");
+        retrieveItems();
+        updateCart();
+      })
   }
 
   const navigateToComputer = (item_id) => {
@@ -93,7 +108,7 @@ const ShoppingCart = props => {
           </div>
           <div className="row fs-5">
             <div className="col text-end">
-              <button className="btn btn-link" onClick={() => ComputerDataService.deleteCart().then(retrieveItems)}>clear cart</button>
+              <button className="btn btn-link" onClick={() => deleteCart()}>clear cart</button>
             </div>
           </div>
         </div>
