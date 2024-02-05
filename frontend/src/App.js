@@ -56,8 +56,10 @@ function App() {
       try {
         const username = cookies.user;
         if (username) {
-          console.log("username: ", username);
-          setUser(username);
+          if (username !== "undefined") {
+            console.log("username: ", username);
+            setUser(username);
+          }
         }
       } catch (error) {
         console.error('Error verifying cookie:', error);
