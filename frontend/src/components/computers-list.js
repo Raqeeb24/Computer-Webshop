@@ -139,7 +139,7 @@ const ComputersList = props => {
           <select className="form-control input" onChange={onChangeSearchCpu}>
             {cpus.map(cpu => {
               return (
-                <option value={cpu}> {cpu.substr(0, 20)} </option>
+                <option value={cpu} key={cpu}> {cpu.substr(0, 20)} </option>
               )
             })}
           </select>
@@ -176,7 +176,7 @@ const ComputersList = props => {
           ))
         ) : (
           computers.map((computer) => (
-            <div className="col-xl-4 col-md-6 pb-2">
+            <div className="col-xl-4 col-md-6 pb-2" key={computer._id}>
               <Link to={"/computers/" + computer._id} className="card custom-card">
                 <div className="card-body">
                   <h5 className="card-title" id="product_card">{computer.name || <Skeleton />}</h5>

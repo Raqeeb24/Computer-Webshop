@@ -75,6 +75,7 @@ function App() {
     lscache.set("cart", [], 5);
     setUser(null);
     removeCookie("token");
+    removeCookie("user");
 
     ComputerDataServices.logout();
     setTimeout(() => {

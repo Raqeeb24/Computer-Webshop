@@ -24,7 +24,6 @@ const ShoppingCart = props => {
 
   const onChangeQuantity = async (e, item_id) => {
     const quantity = e.target.value;
-    console.log(`q: ${e.target.value}`);
     try {
       const data = {
         item_id: item_id,
@@ -63,7 +62,6 @@ const ShoppingCart = props => {
   }
 
   const deleteCart = () => {
-    console.log("DELETE CART")
     ComputerDataService.deleteCart()
       .then(() => {
         lscache.remove("cart");
@@ -120,5 +118,3 @@ const ShoppingCart = props => {
 }
 
 export default ShoppingCart;
-
-//Bei Quantität stehengeblieben. Es muss hinterdacht werden, wie man die Quantität festlegt. Mit UseState setzt man die Quantität im allgemein fest, ohne diese für eine reale anpassung eines einzelnen produktes Anzupassen?.

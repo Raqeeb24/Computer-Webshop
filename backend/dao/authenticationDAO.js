@@ -21,7 +21,7 @@ export default class AuthenticationDAO {
       return await authentication.findOne({ _id: new ObjectId(id) });
     } catch (e) {
       console.error(e);
-      res.status(500).json({ message: "Internal Server Error at findUser" });
+      res.status(500).json({ message: "Internal Server Error at verifyUser" });
     }
   }
   static async findUser(email){
