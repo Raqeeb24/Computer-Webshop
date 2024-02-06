@@ -63,8 +63,15 @@ export default class AuthController {
                 return res.json({ message: 'Incorrect password or email' })
             }
             const token = createSecretToken(user._id);
+            const cart = req.session.cart;
+            req.session.regenerate((err) => {
+                if (err) {
+                    console.error('Failed to regenerate session:', err);
+                } else {
+                    console.log({ message: 'Session regenerated' });
+                }
+            });
             req.session.user_id = user._id;
-            const cart = req.session.cart
             if(cart){
                 cart.forEach(async (item) => {
                     item.user_id = user._id;
@@ -86,6 +93,8 @@ export default class AuthController {
 
     static async apiPostLogout(req, res) {
         try {
+            CookiesMiddleware.deleteCookie(res, "token");
+            CookiesMiddleware.deleteCookie(res, "user");
             req.session.destroy((err) => {
                 if (err) {
                     console.error('Failed to destroy session:', err);
@@ -94,8 +103,6 @@ export default class AuthController {
                     res.json({ message: 'Session destroyed' });
                 }
             });
-            CookiesMiddleware.deleteCookie(res, "token");
-            CookiesMiddleware.deleteCookie(res, "user");
         } catch (error) {
             console.error('Error during session destruction:', error);
             res.status(500).json({ error: 'Internal server error' });
