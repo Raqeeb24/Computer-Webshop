@@ -27,7 +27,7 @@ import SecondHome from './pages/Home';
 function App() {
   const [user, setUser] = useState();
   const [itemCount, setItemCount] = useState();
-  const [cookies] = useCookies([]);
+  const [cookies, removeCookie] = useCookies([]);
 
   useEffect(() => {
     console.error("useffect countitems called")
@@ -76,8 +76,8 @@ function App() {
   async function logout() {
     lscache.set("cart", [], 5);
     setUser(null);
-    //removeCookie("token");
-    //removeCookie("user");
+    removeCookie("token");
+    removeCookie("user");
 
     ComputerDataServices.logout();
     setTimeout(() => {
