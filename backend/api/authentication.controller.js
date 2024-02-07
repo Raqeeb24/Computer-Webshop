@@ -21,8 +21,15 @@ export default class AuthController {
             };
             await AuthenticationDAO.addUser(user);
             const token = createSecretToken(user._id);
-            req.session.user_id = user._id;
             const cart = req.session.cart
+            req.session.regenerate((err) => {
+                if (err) {
+                    console.error('Failed to regenerate session:', err);
+                } else {
+                    console.log({ message: 'Session regenerated' });
+                }
+            });
+            req.session.user_id = user._id;
             if(cart){
                 cart.forEach(async (item) => {
                     item.user_id = user._id;

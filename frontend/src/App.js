@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import 'bootstrap/dist/js/bootstrap.bundle';
+import './App.css';
 
 import { Switch, Route, Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -18,7 +17,6 @@ import Signup from './components/signup';
 import ComputersList from './components/computers-list';
 import AddComputer from './components/add-computer';
 import ShoppingCart from './components/shopping-cart';
-import Test from './components/test';
 
 import ComputerDataServices from '../src/services/computer';
 
@@ -30,7 +28,7 @@ function App() {
   const [cookies, removeCookie] = useCookies([]);
 
   useEffect(() => {
-    console.error("useffect countitems called")
+    console.log("useffect countitems called")
     const countIitems = () => {
       const lsCart = lscache.get("cart");
       if (lsCart) {
@@ -91,35 +89,61 @@ function App() {
 
   return (
     <>
-      <div>
-        <Navbar expand="lg" bg="dark" variant="dark">
-          <Container>
-            <Navbar.Brand>Computer Webshop</Navbar.Brand>
-            <Navbar.Toggle className='justify-content-end' aria-controls="responsive-navbar-nav" />
-            <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="me-auto">
-                <Link to={'/computers'} className='nav-link'>Computers</Link>
-                {user ? (
-                  <span onClick={logout} className="nav-link" style={{ cursor: "pointer" }}>
-                    Logout {user}
-                  </span>
-                ) : (
-                  <Link to={"/login"} className="nav-link">
-                    Login
+      <div className='d-flex flex-column min-vh-100'>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div className="container">
+            <div className="navbar-brand">
+              Computer Webshop
+            </div>
+            <div className="d-flex flex-row-reverse gap-3">
+              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="true" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <ul className="navbar-nav mb-lg-0" id="cart-link-toggle">
+                <li className="nav-item">
+                  <Link to={'/shoppingCart'} className="nav-link">
+                    <Badge badgeContent={itemCount} color="primary">
+                      <ShoppingCartIcon />
+                    </Badge>
                   </Link>
-                )}
-                <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
-              </Nav>
-              <Nav className='ml-auto'>
+                </li>
+              </ul>
+            </div>
+            <div className="collapse navbar-collapse" id="navbarText">
+              <ul className="navbar-nav me-auto mb-lg-0">
+                <li className="nav-item">
+                  <Link to={'/computers'} className='nav-link'>Computers</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to={'/addComputer'} className='nav-link'>AddComputers</Link>
+                </li>
+              </ul>
+              <ul className="navbar-nav ml-auto mb-lg-0">
+                <li className="nav-item">
+                  {user ? (
+                    <span onClick={logout} className="nav-link" style={{ cursor: "pointer" }}>
+                      Logout {user}
+                    </span>
+                  ) : (
+                    <Link to={"/login"} className="nav-link">
+                      Login
+                    </Link>
+                  )}
+                </li>
+              </ul>
+            </div>
+            <ul className="navbar-nav ml-auto mb-lg-0" id="cart-link">
+
+              <li className="nav-item">
                 <Link to={'/shoppingCart'} className="nav-link">
-                  <Badge badgeContent={itemCount}>
+                  <Badge badgeContent={itemCount} color="primary">
                     <ShoppingCartIcon />
                   </Badge>
                 </Link>
-              </Nav>
-            </Navbar.Collapse>
-          </Container>
-        </Navbar>
+              </li>
+            </ul>
+          </div>
+        </nav >
 
         <div className="container mt-3">
           <Switch>
@@ -170,15 +194,15 @@ function App() {
                 <ShoppingCart {...props} updateCart={updateCart} />
               )}
             />
-            <Route
-              path="/test"
-              render={() => (
-                <Test />
-              )}
-            />
           </Switch>
         </div>
-      </div>
+
+        <footer className="mt-auto">
+          <div className='container'>
+            <p>footer</p>
+          </div>
+        </footer>
+      </div >
       <ToastContainer />
     </>
   );

@@ -1,5 +1,4 @@
 .App {
-  text-align: center;
 }
 
 .App-logo {
@@ -26,6 +25,34 @@
 
 .App-link {
   color: #61dafb;
+}
+
+#cart-link {
+  display: none;
+}
+
+@media screen and (min-width: 992px) {
+  #cart-link {
+    display: inline-block;
+  }
+  #cart-link-toggle {
+    display: none;
+  }
+}
+
+.footer {
+  height: 20px;
+  width: 100%;
+  position: absolute;
+  bottom: 4px;
+}
+
+footer {
+  position: relative;
+  height: 100px;
+  bottom: 0;
+  width: 100%;
+  background-color: aquamarine;
 }
 
 @keyframes App-logo-spin {
