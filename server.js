@@ -29,7 +29,7 @@ app.use(function (req, res, next) {
 app.set("trust proxy", 1);
 
 app.use(session({
-  name: "cart.sid",
+  name: ".sid",
   secret: process.env.TOKEN,
   resave: false,
   saveUninitialized: false,

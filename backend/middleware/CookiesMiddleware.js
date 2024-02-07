@@ -3,14 +3,14 @@ export default class CookiesMiddleware {
         res.cookie(name, value, {
             maxAge: 900000,
             withCredentials: true,
-            httpOnly: false,
+            httpOnly: true,
         });
     }
     static deleteCookie(res, name){
         res.cookie(name, "", {
             maxAge: 0,
             withCredentials: true,
-            httpOnly: false,
+            httpOnly: true,
         });
     }
 }

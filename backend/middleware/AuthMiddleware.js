@@ -11,37 +11,32 @@ export default class AuthMiddleware {
     if (!token) {
       return res.json({ status: false })
     }
-    jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
+    jwt.verify(token, process.env.TOKEN_KEY, async (err) => {
       if (err) {
-        return res.json({ status: false })
+        return res.json({ status: false });
       } else {
-        const user = await AuthenticationDAO.verifyUser(data.id);
-        console.log("user: ", data);
-        if (user) {
-          return res.json({ status: true, user: user.username })
-        } else {
-          return res.json({ status: false })
-        }
+        return res.json({ status: true });
       }
     })
   }
 
-  static async apiUserVerification(token) {
+  static async apiUserVerification(req, res) {
+    const token = req.cookies.token
     if (!token) {
-      return { status: false };
+      return res.json({ status: false })
     }
-    try {
-      const data = jwt.verify(token, process.env.TOKEN_KEY);
-      const user = await AuthenticationDAO.verifyUser(data.id);
-  
-      if (user) {
-        return { status: true, user: data };
+    jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.json({ status: false });
       } else {
-        return { status: false };
+        const user = await AuthenticationDAO.verifyUser(data.id);
+        if (user) {
+          return res.json({ status: true, user: user.username });
+        } else {
+          return res.json({ status: false });
+        }
       }
-    } catch (err) {
-      return { status: false };
-    }
+    });
   }
-  
+
 }

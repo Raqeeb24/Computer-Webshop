@@ -19,13 +19,14 @@ import AddComputer from './components/add-computer';
 import ShoppingCart from './components/shopping-cart';
 
 import ComputerDataServices from '../src/services/computer';
+import { encryptCookie, decryptCookie } from './util/crypto';
 
 import SecondHome from './pages/Home';
 
 function App() {
   const [user, setUser] = useState();
   const [itemCount, setItemCount] = useState();
-  const [cookies, removeCookie] = useCookies([]);
+  const [cookies, setCookie, removeCookie] = useCookies([]);
 
   useEffect(() => {
     console.log("useffect countitems called")
@@ -50,24 +51,39 @@ function App() {
   }, [user, itemCount]);
 
   useEffect(() => {
-    const verifyUser = () => {
+    const verifyUser = async () => {
+      console.log("verifiying...")
       try {
-        const username = cookies.user;
-        if (username) {
-          if (username !== "undefined") {
-            console.log("username: ", username);
+        const { data } = await ComputerDataServices.verifyUser();
+        const { status } = data;
+        if (status) {
+          if (cookies.user) {
+            const username = decryptCookie(cookies.user);
             setUser(username);
+          } else {
+            const { data } = await ComputerDataServices.getVerifiedUser();
+            const { status, user } = data;
+            if(status && user){
+              const encryptedValue = encryptCookie(user);
+              setCookie("user", encryptedValue, { maxAge: 900000 });
+              setUser(user);
+            }
           }
+        } else {
+          removeCookie("user");
         }
       } catch (error) {
         console.error('Error verifying cookie:', error);
       }
     }
     verifyUser();
-  }, [user, cookies.user]);
+  }, [user, cookies.user, removeCookie, setCookie]);
 
   async function login(user = null) {
     lscache.remove("cart");
+
+    const encryptedValue = encryptCookie(user);
+    setCookie("user", encryptedValue, { maxAge: 900000 });
     setUser(user);
   }
 
@@ -197,6 +213,11 @@ function App() {
           </Switch>
         </div>
 
+        <footer className="mt-auto">
+          <div className='container'>
+            <p>footer</p>
+          </div>
+        </footer>
       </div >
       <ToastContainer />
     </>

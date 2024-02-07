@@ -86,7 +86,6 @@ export default class AuthController {
                 });
             }
             CookiesMiddleware.setCookie(res, "token", token);
-            CookiesMiddleware.setCookie(res, "user", user.username);
             res.status(201).json({ 
                 message: "User logged in successfully", 
                 success: true,
@@ -101,7 +100,6 @@ export default class AuthController {
     static async apiPostLogout(req, res) {
         try {
             CookiesMiddleware.deleteCookie(res, "token");
-            CookiesMiddleware.deleteCookie(res, "user");
             req.session.destroy((err) => {
                 if (err) {
                     console.error('Failed to destroy session:', err);

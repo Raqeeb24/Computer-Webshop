@@ -34,6 +34,18 @@ class ComputerDataService {
     });
   }
 
+  verifyUser() {
+    return http.post("/secured/", {}, {
+      withCredentials: true
+    })
+  }
+
+  getVerifiedUser() {
+    return http.get("/secured/", {
+      withCredentials: true
+    })
+  }
+
   createReview(data) {
     //return axios.post(`${baseURL}/computers/review-new`, data);
     return http.post("/computers/review", data);

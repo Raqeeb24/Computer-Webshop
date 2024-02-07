@@ -48,6 +48,12 @@
     /*border-color: #f00 #0f0 #00f #ff0;*/
 }
 
+.search-button:hover {
+    background-color: #2196F3;
+    color: white;
+    border-color: #2196F3;
+}
+
 @media (hover: hover) {
     .custom-card:hover {
         color: #333333;
@@ -57,12 +63,6 @@
 
     .custom-card:hover .add-to-cart-button {
         display: block;
-    }
-
-    .search-button:hover {
-        background-color: #2196F3;
-        color: white;
-        border-color: #2196F3;
     }
 }
 
