@@ -38,7 +38,7 @@ const Login = props => {
       if (success) {
         handleSuccess(message);
         props.login(username);
-        props.history.push('/home');
+        props.history.push('/computers');
       } else {
         handleError(message);
       }

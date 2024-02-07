@@ -197,11 +197,6 @@ function App() {
           </Switch>
         </div>
 
-        <footer className="mt-auto">
-          <div className='container'>
-            <p>footer</p>
-          </div>
-        </footer>
       </div >
       <ToastContainer />
     </>
