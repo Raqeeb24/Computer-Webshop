@@ -1,16 +1,18 @@
 export default class CookiesMiddleware {
-    static setCookie(res, name, value){
+    static setCookie(res, name, value) {
         res.cookie(name, value, {
             maxAge: 900000,
             withCredentials: true,
-            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            httpOnly: true
         });
     }
-    static deleteCookie(res, name){
+    static deleteCookie(res, name) {
         res.cookie(name, "", {
             maxAge: 0,
             withCredentials: true,
-            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            httpOnly: true
         });
     }
 }

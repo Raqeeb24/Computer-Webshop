@@ -56,21 +56,28 @@ function App() {
       try {
         const { data } = await ComputerDataServices.verifyUser();
         const { status } = data;
+        console.log("1. STATUS:", status);
         if (status) {
           if (cookies.user) {
             const username = decryptCookie(cookies.user);
+            console.log("2. User:", username);
             setUser(username);
           } else {
             const { data } = await ComputerDataServices.getVerifiedUser();
             const { status, user } = data;
+            console.log("2. STATUS:", status);
+            console.log("2. user:", user);
             if(status && user){
               const encryptedValue = encryptCookie(user);
               setCookie("user", encryptedValue, { maxAge: 900000 });
               setUser(user);
+            } else {
+              setUser(null);
             }
           }
         } else {
           removeCookie("user");
+          setUser(null);
         }
       } catch (error) {
         console.error('Error verifying cookie:', error);
@@ -90,7 +97,6 @@ function App() {
   async function logout() {
     lscache.set("cart", [], 5);
     setUser(null);
-    removeCookie("token");
     removeCookie("user");
 
     ComputerDataServices.logout();
