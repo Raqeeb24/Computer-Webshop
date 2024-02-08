@@ -100,9 +100,11 @@ function App() {
     removeCookie("user");
 
     ComputerDataServices.logout();
+    /*
     setTimeout(() => {
       window.location.reload();
     }, 100);
+    */
   }
 
   async function updateCart(item = null) {

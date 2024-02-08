@@ -105,7 +105,10 @@ export default class AuthController {
                     console.error('Failed to destroy session:', err);
                     res.status(500).json({ error: 'Internal server error' });
                 } else {
-                    res.json({ message: 'Session destroyed' });
+                    res.status(204).json({ 
+                        message: "Session destroyed successfully", 
+                        success: true,
+                    });
                 }
             });
         } catch (error) {
