@@ -99,12 +99,10 @@ function App() {
     setUser(null);
     removeCookie("user");
 
-    ComputerDataServices.logout();
-    /*
+    await ComputerDataServices.logout();
     setTimeout(() => {
       window.location.reload();
     }, 100);
-    */
   }
 
   async function updateCart(item = null) {
